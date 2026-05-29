@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1b1745">
 <title>Tafels Brawl</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +34,13 @@
   body {
     font-family: 'Lilita One', 'Bangers', 'Arial Black', sans-serif;
     color: #fff;
-    height: 100vh;
+    height: 100vh;          /* fallback */
+    height: 100svh;         /* small viewport — accounts for system UI */
+    height: 100dvh;         /* dynamic — adapts as URL bar shows/hides */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
     display: flex;
     flex-direction: column;
     background:
@@ -111,7 +118,8 @@
   /* ============ HOME BUTTON ============ */
   .home-btn {
     position: fixed;
-    top: 10px; left: 14px;
+    top: calc(10px + env(safe-area-inset-top));
+    left: calc(14px + env(safe-area-inset-left));
     z-index: 50;
     width: 62px; height: 62px;
     border-radius: 50%;
@@ -311,7 +319,8 @@
   /* ============ TIMER (corner) ============ */
   .timer {
     position: fixed;
-    top: 8px; right: 12px;
+    top: calc(8px + env(safe-area-inset-top));
+    right: calc(12px + env(safe-area-inset-right));
     z-index: 50;
     width: 82px; height: 82px;
     border-radius: 50%;
@@ -777,7 +786,8 @@
   /* ============ MUTE BUTTON ============ */
   .mute-btn {
     position: fixed;
-    bottom: 10px; right: 12px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    right: calc(12px + env(safe-area-inset-right));
     z-index: 50;
     width: 38px; height: 38px;
     border-radius: 50%;
