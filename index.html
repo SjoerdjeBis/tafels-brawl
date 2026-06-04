@@ -243,20 +243,8 @@
     color: #fff;
     filter: none;
     transform: translateY(0);
-  }
-  .table-card.selected::after {
-    content: "✓";
-    position: absolute;
-    top: 6px; right: 8px;
-    width: 26px; height: 26px;
-    background: var(--green);
-    color: #fff;
-    border: 3px solid var(--ink);
-    border-radius: 50%;
-    font-size: 0.55em;
-    display: flex; align-items: center; justify-content: center;
-    -webkit-text-stroke: 1px var(--ink);
-    box-shadow: 0 2px 0 var(--ink);
+    border-color: #fff;
+    box-shadow: 0 5px 0 var(--ink), 0 0 16px 2px rgba(255,255,255,0.45);
   }
   /* per-table color when selected */
   .table-card[data-t="2"].selected  { background: linear-gradient(180deg, #ff8a9e, #ff3b5c); }
