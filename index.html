@@ -270,6 +270,7 @@
   .table-card[data-t="8"].selected  { background: linear-gradient(180deg, #b87aff, var(--purple)); }
   .table-card[data-t="9"].selected  { background: linear-gradient(180deg, #ff8aff, #d22aff); }
   .table-card[data-t="10"].selected { background: linear-gradient(180deg, #ff6b6b, var(--red-deep)); }
+  .table-card[data-t="11"].selected { background: linear-gradient(180deg, #7affd0, #12b88f); }
 
   .picker-actions {
     margin-top: 10px;
@@ -1453,7 +1454,7 @@ const BIMG = {
   }
 
   // ============ STATE ============
-  const ALL_TABLES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const ALL_TABLES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   const ROUND_TIME = 30;        // seconden per ronde
   const FIRST_GOAL = 3;         // eerste brawler: 3 goed
   const ROUND_GOAL = 5;         // daarna: 5 goed per ronde
@@ -1669,6 +1670,7 @@ const BIMG = {
         8:  ['#b87aff', '#8a3aff', '#fff'],
         9:  ['#ff8aff', '#d22aff', '#fff'],
         10: ['#ff6b6b', '#aa0e2a', '#fff'],
+        11: ['#7affd0', '#12b88f', '#fff'],
       };
       const c = colors[t] || ['#fff','#d8d8d8','#1a0f3a'];
       b.style.background = `linear-gradient(180deg, ${c[0]}, ${c[1]})`;
