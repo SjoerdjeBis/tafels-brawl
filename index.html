@@ -5,9 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1b1745">
 <title>Tafels Brawl</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tafels">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Lilita+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Lilita+One&family=Pixelify+Sans:wght@500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg-1: #1b1745;
@@ -30,6 +37,11 @@
 
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { height:100%; }
+  button {
+    touch-action: manipulation;          /* geen dubbeltik-zoom bij snel tikken */
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; user-select: none;
+  }
 
   body {
     font-family: 'Lilita One', 'Bangers', 'Arial Black', sans-serif;
@@ -69,7 +81,8 @@
   .header {
     position: relative; z-index: 2;
     width: 100%;
-    padding: 10px 110px;
+    padding: 10px 90px;
+    min-height: 86px;
     text-align: center;
     background: linear-gradient(180deg, var(--orange) 0%, var(--gold-2) 100%);
     border-bottom: 4px solid var(--orange-deep);
@@ -81,7 +94,8 @@
   .header h1 {
     font-family: 'Baloo 2', sans-serif;
     font-weight: 800;
-    font-size: clamp(1.8em, 4.6vw, 2.7em);
+    font-size: clamp(1.2em, 5.6vw, 2.7em);
+    white-space: nowrap;
     color: #fff;
     text-shadow: 0 2px 6px rgba(0,0,0,0.45);
     letter-spacing: 1px;
@@ -93,9 +107,10 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    row-gap: 5px;
     width: 100%;
-    margin: 2px -102px 0;   /* break out of header side padding so badges fit on one line */
+    margin-top: 2px;
   }
   .tbl-label {
     color: var(--ink);
@@ -159,7 +174,8 @@
     align-items: center;
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;          /* vangnet voor hele lage schermen */
   }
   .start-screen.hidden { display: none; }
   .start-hero {
@@ -231,7 +247,7 @@
 
   .table-card {
     height: 100%;
-    min-height: 0;
+    min-height: 46px;
     aspect-ratio: 1 / 1;
     max-height: 130px;
     border-radius: 14px;
@@ -252,7 +268,19 @@
     margin: 0 auto;
     width: 100%;
   }
-  .table-card:hover { transform: translateY(-3px); }
+  @media (hover: hover) { .table-card:hover { transform: translateY(-3px); } }
+  .table-card.has-stars { padding-bottom: 0.32em; }
+  /* beheersing per tafel: ★★☆ onderin de kaart */
+  .tc-stars {
+    position: absolute; left: 0; right: 0; bottom: 3px;
+    font-size: 0.34em;
+    letter-spacing: 0;
+    line-height: 1;
+    -webkit-text-stroke: 0;
+    text-shadow: 0 1px 0 var(--ink);
+    color: rgba(255,255,255,0.35);
+  }
+  .tc-stars .on { color: #ffe14d; }
   .table-card.selected {
     color: #fff;
     filter: none;
@@ -262,14 +290,14 @@
   }
   /* per-table color when selected */
   .table-card[data-t="2"].selected  { background: linear-gradient(180deg, #ff8a9e, #ff3b5c); }
-  .table-card[data-t="3"].selected  { background: linear-gradient(180deg, #ffb066, var(--orange)); }
-  .table-card[data-t="4"].selected  { background: linear-gradient(180deg, #ffe566, var(--gold)); }
-  .table-card[data-t="5"].selected  { background: linear-gradient(180deg, #b8f8d0, var(--green)); }
-  .table-card[data-t="6"].selected  { background: linear-gradient(180deg, #66e0ff, var(--cyan)); }
-  .table-card[data-t="7"].selected  { background: linear-gradient(180deg, #5b9dff, var(--blue)); }
-  .table-card[data-t="8"].selected  { background: linear-gradient(180deg, #b87aff, var(--purple)); }
+  .table-card[data-t="3"].selected  { background: linear-gradient(180deg, #ffb066, #ff7a1a); }
+  .table-card[data-t="4"].selected  { background: linear-gradient(180deg, #ffe566, #ffcc00); }
+  .table-card[data-t="5"].selected  { background: linear-gradient(180deg, #b8f8d0, #2ad96e); }
+  .table-card[data-t="6"].selected  { background: linear-gradient(180deg, #66e0ff, #3ad6ff); }
+  .table-card[data-t="7"].selected  { background: linear-gradient(180deg, #5b9dff, #2b6cff); }
+  .table-card[data-t="8"].selected  { background: linear-gradient(180deg, #b87aff, #8a3aff); }
   .table-card[data-t="9"].selected  { background: linear-gradient(180deg, #ff8aff, #d22aff); }
-  .table-card[data-t="10"].selected { background: linear-gradient(180deg, #ff6b6b, var(--red-deep)); }
+  .table-card[data-t="10"].selected { background: linear-gradient(180deg, #ff6b6b, #aa0e2a); }
   .table-card[data-t="11"].selected { background: linear-gradient(180deg, #7affd0, #12b88f); }
 
   .picker-actions {
@@ -289,7 +317,7 @@
     cursor: pointer;
     letter-spacing: 1.5px;
   }
-  .picker-quick:hover { background: rgba(0,0,0,0.5); }
+  @media (hover: hover) { .picker-quick:hover { background: rgba(0,0,0,0.5); } }
 
   .start-btn {
     width: 100%; max-width: 400px;
@@ -308,7 +336,7 @@
     transition: transform .08s, box-shadow .08s, filter .15s;
     flex-shrink: 0;
   }
-  .start-btn:hover:not(:disabled) { filter: brightness(1.1); }
+  @media (hover: hover) { .start-btn:hover:not(:disabled) { filter: brightness(1.1); } }
   .start-btn:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 3px 0 #044b25; }
   .start-btn:disabled {
     background: linear-gradient(180deg, #555, #333);
@@ -417,6 +445,13 @@
     flex-shrink: 0;
     text-shadow: 0 2px 4px rgba(0,0,0,0.6);
   }
+  .next-preview { position: relative; overflow: hidden; }
+  .next-q {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1em; color: #fff;
+    text-shadow: 0 2px 0 var(--ink), 0 0 8px rgba(0,0,0,0.8);
+  }
   .progress-info { flex: 1; }
   .progress-label {
     display: flex; justify-content: space-between;
@@ -452,7 +487,7 @@
       radial-gradient(circle at 50% 0%, rgba(255,255,255,0.12), transparent 60%),
       linear-gradient(180deg, #2b3680, #14185a);
     border-radius: 22px;
-    padding: 18px 20px 14px;
+    padding: 12px 12px 12px;
     text-align: center;
     border: 4px solid var(--gold);
     box-shadow:
@@ -463,7 +498,8 @@
     overflow: hidden;
     flex: 1 1 auto;
     min-height: 0;
-    display: flex; flex-direction: column; justify-content: center;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px;
   }
   .question-card::before, .question-card::after {
     content: "★";
@@ -476,71 +512,55 @@
   .question-card::after  { bottom: -50px; right: -20px; transform: rotate(20deg); }
 
   .question {
-    font-size: clamp(2.8em, 7vw, 4.4em);
+    font-size: clamp(2.4em, min(12vw, 7vh), 4.2em);
     color: #fff;
     -webkit-text-stroke: 3px var(--ink);
     text-shadow:
       0 5px 0 var(--ink),
       0 7px 12px rgba(0,0,0,0.5);
-    margin-bottom: 18px;
     letter-spacing: 3px;
-    line-height: 1;
+    line-height: 1.05;
+    margin-top: auto;
     position: relative; z-index: 1;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   .question .x { color: var(--gold); }
+  .question .gap { color: var(--gold); }
 
-  /* Input */
+  /* Antwoord-vakje (geen <input>: we gebruiken een eigen cijfertoetsenbord,
+     zodat het telefoontoetsenbord niet steeds open/dicht klapt) */
   .answer-row {
-    display: flex; gap: 12px;
-    justify-content: center; align-items: stretch;
+    display: flex; justify-content: center;
+    width: 100%;
     position: relative; z-index: 1;
+    flex-shrink: 0;
   }
   .answer-input {
-    flex: 1; max-width: 220px;
-    font-family: inherit;
-    font-size: clamp(2.1em, 5.5vw, 2.7em);
-    text-align: center;
+    width: min(220px, 62%);
+    height: clamp(46px, 7.5vh, 66px);
+    font-size: clamp(1.9em, min(8vw, 5.4vh), 2.7em);
+    display: flex; align-items: center; justify-content: center;
     background: linear-gradient(180deg, #fff5cf, #ffe082);
     color: var(--ink);
     border: 4px solid var(--ink);
     border-radius: 14px;
-    padding: 8px 12px;
-    outline: none;
     -webkit-text-stroke: 1px var(--ink);
     box-shadow:
       0 6px 0 var(--gold-deep),
-      inset 0 -4px 0 rgba(0,0,0,0.1);
-    transition: transform .08s ease, box-shadow .08s ease;
+      0 0 0 4px rgba(255,204,0,0.3);
+    line-height: 1;
   }
-  .answer-input:focus {
-    background: linear-gradient(180deg, #fffce0, #ffd028);
-    box-shadow:
-      0 6px 0 var(--gold-deep),
-      0 0 0 4px rgba(255,204,0,0.4);
+  .answer-input:empty::after {
+    content: "";
+    display: block;
+    width: 3px; height: 0.9em;
+    background: var(--ink);
+    opacity: 0.55;
+    animation: caret 1s steps(1) infinite;
   }
-  .answer-input::-webkit-outer-spin-button,
-  .answer-input::-webkit-inner-spin-button {
-    -webkit-appearance: none; margin: 0;
-  }
-  .answer-input { -moz-appearance: textfield; }
-
-  .submit-btn {
-    font-family: inherit;
-    font-size: 1.5em;
-    padding: 0 22px;
-    background: linear-gradient(180deg, var(--green), var(--green-deep));
-    color: #fff;
-    border: 5px solid var(--ink);
-    border-radius: 16px;
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
-    -webkit-text-stroke: 1px var(--ink);
-    box-shadow: 0 6px 0 #066b34;
-    transition: transform .08s ease, box-shadow .08s ease;
-  }
-  .submit-btn:hover { filter: brightness(1.1); }
-  .submit-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #066b34; }
+  @keyframes caret { 50% { opacity: 0; } }
+  .answer-input.hint { color: rgba(26,15,58,0.3); -webkit-text-stroke: 0; }
 
   .answer-row.correct .answer-input {
     background: linear-gradient(180deg, #b8f8d0, var(--green));
@@ -564,20 +584,61 @@
   }
 
   .feedback {
-    height: 34px; margin-top: 12px;
-    font-size: 1.4em;
+    min-height: 1.25em;
+    font-size: 1.25em;
+    line-height: 1.2;
     letter-spacing: 1px;
     text-shadow: 0 3px 0 rgba(0,0,0,0.5), 0 0 14px currentColor;
     position: relative; z-index: 1;
     -webkit-text-stroke: 1px rgba(0,0,0,0.3);
+    flex-shrink: 0;
   }
   .feedback.good { color: var(--green); }
   .feedback.bad  { color: var(--red); }
+  .feedback.fix  { color: #fff; text-shadow: 0 3px 0 rgba(0,0,0,0.5); }
+  .feedback .ans { color: var(--gold); }
   .streak-msg {
-    height: 22px; color: var(--gold); font-size: 1.05em;
+    color: var(--gold); font-size: 0.8em;
     text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+
+  /* ============ NUMPAD ============ */
+  .numpad {
+    width: 100%; max-width: 360px;
+    flex: 1 1 auto;
+    min-height: 150px;
+    max-height: 290px;
+    margin-bottom: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+    position: relative; z-index: 1;
+  }
+  .key {
+    font-family: inherit;
+    font-size: clamp(1.4em, min(7vw, 4.2vh), 2em);
+    color: var(--ink);
+    background: linear-gradient(180deg, #ffffff, #d9dcf2);
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    box-shadow: 0 4px 0 var(--ink);
+    cursor: pointer;
+    line-height: 1;
+    min-height: 0;
+    transition: transform .06s ease, box-shadow .06s ease;
+  }
+  .key:active, .key.pressed { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+  .key-back { background: linear-gradient(180deg, #ffd9a8, #ffae57); }
+  .key-go {
+    color: #fff;
+    background: linear-gradient(180deg, var(--green), var(--green-deep));
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    -webkit-text-stroke: 1px var(--ink);
     letter-spacing: 1px;
   }
+  .numpad.disabled .key { pointer-events: none; }
 
   /* ============ COLLECTION ============ */
   .collection {
@@ -613,7 +674,7 @@
   .collection-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
   .collection-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
   .brawler-slot {
-    width: 78px; min-width: 78px; height: 92px;
+    width: 68px; min-width: 68px; height: 78px;
     border-radius: 14px;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
@@ -630,7 +691,7 @@
     background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18), transparent 60%);
     pointer-events: none;
   }
-  .brawler-slot:hover { transform: translateY(-4px); }
+  @media (hover: hover) { .brawler-slot:hover { transform: translateY(-4px); } }
   .brawler-slot .emo { font-size: 1.8em; line-height: 1; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); }
   .brawler-slot .nm { font-size: 0.9em; text-align:center; line-height: 1.1; opacity: 1; letter-spacing: 0.3px; text-shadow: 1px 1px 0 rgba(0,0,0,0.6); }
   .brawler-slot.locked {
@@ -638,7 +699,7 @@
     color: #2c3358;
     filter: grayscale(1) brightness(0.7);
   }
-  .brawler-slot.unlocked { animation: unlockIn 0.6s ease; }
+  .brawler-slot.just { animation: unlockIn 0.6s ease; }
   @keyframes unlockIn {
     0%{transform:scale(0) rotate(-180deg);opacity:0;}
     70%{transform:scale(1.2) rotate(10deg);}
@@ -794,46 +855,46 @@
   }
 
   /* ============ MUTE BUTTON ============ */
+  /* Zit in de hero (startscherm) en in de stats-balk (spel), niet meer zwevend */
   .mute-btn {
-    position: fixed;
-    bottom: calc(10px + env(safe-area-inset-bottom));
-    right: calc(12px + env(safe-area-inset-right));
-    z-index: 50;
-    width: 38px; height: 38px;
+    width: 36px; height: 36px;
+    flex-shrink: 0;
     border-radius: 50%;
-    background: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,0.45);
     border: 2px solid rgba(255,255,255,0.25);
     color: #fff;
-    font-size: 1.1em;
+    font-size: 1.05em;
     cursor: pointer;
     font-family: inherit;
     line-height: 1;
     transition: transform .08s, background .15s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    display: inline-flex; align-items: center; justify-content: center;
   }
-  .mute-btn:hover { background: rgba(0,0,0,0.75); transform: scale(1.05); }
+  @media (hover: hover) { .mute-btn:hover { background: rgba(0,0,0,0.75); transform: scale(1.05); } }
   .mute-btn.muted { opacity: 0.6; }
+  .start-hero { position: relative; width: 100%; }
+  .start-hero .mute-btn { position: absolute; right: 0; bottom: -4px; }
 
   /* ============ PB PANEL ============ */
   .pb-panel {
     width: 100%;
-    display: flex; gap: 10px; justify-content: center;
+    display: flex; gap: 8px; justify-content: center;
     flex-shrink: 0;
   }
   .pb-item {
-    flex: 1; max-width: 220px;
+    flex: 1; max-width: 220px; min-width: 0;
     background: rgba(0,0,0,0.4);
     border: 2px solid rgba(255,204,0,0.45);
     border-radius: 14px;
-    padding: 7px 10px;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 2px;
-    text-align: center;
+    padding: 5px 8px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px;
     box-shadow: 0 3px 0 rgba(0,0,0,0.4), inset 0 0 18px rgba(255,204,0,0.08);
   }
-  .pb-ico { font-size: 1.4em; line-height: 1; }
-  .pb-lbl { font-size: 0.84em; letter-spacing: 1.2px; color: rgba(255,255,255,0.85); }
-  .pb-val { color: var(--gold); font-size: 1.5em; text-shadow: 2px 2px 0 rgba(0,0,0,0.5); line-height: 1; }
+  .pb-txt { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+  .pb-ico { font-size: 1.3em; line-height: 1; }
+  .pb-lbl { font-size: 0.72em; letter-spacing: 0.8px; color: rgba(255,255,255,0.85); white-space: nowrap; }
+  .pb-val { color: var(--gold); font-size: 1.3em; text-shadow: 2px 2px 0 rgba(0,0,0,0.5); line-height: 1; white-space: nowrap; }
 
   /* ============ MODE TOGGLE ============ */
   .mode-toggle {
@@ -854,7 +915,7 @@
     display: flex; flex-direction: column; align-items: center; gap: 2px;
     transition: all .15s;
   }
-  .mode-opt:hover { background: rgba(0,0,0,0.55); color: #fff; }
+  @media (hover: hover) { .mode-opt:hover { background: rgba(0,0,0,0.55); color: #fff; } }
   .mode-opt.active {
     background: linear-gradient(180deg, var(--orange), var(--orange-deep));
     border-color: var(--gold);
@@ -886,25 +947,26 @@
 
   /* ============ THEME SWITCHER ============ */
   .theme-switcher {
-    display: flex; gap: 10px;
+    display: flex; gap: 8px;
     width: 100%;
     flex-shrink: 0;
   }
   .theme-opt {
-    flex: 1;
+    flex: 1; min-width: 0;
     background: rgba(0,0,0,0.4);
     border: 3px solid rgba(255,255,255,0.15);
     border-radius: 14px;
-    padding: 8px 10px;
+    padding: 6px 4px;
     color: rgba(255,255,255,0.65);
     font-family: inherit;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
     transition: all .15s;
-    letter-spacing: 1.5px;
-    font-size: 1.05em;
+    letter-spacing: 1px;
+    font-size: 0.95em;
+    white-space: nowrap;
   }
-  .theme-opt:hover { background: rgba(0,0,0,0.55); color: #fff; }
+  @media (hover: hover) { .theme-opt:hover { background: rgba(0,0,0,0.55); color: #fff; } }
   .theme-opt .theme-emoji { font-size: 1.4em; line-height: 1; }
   .theme-opt.theme-brawl-btn.active {
     background: linear-gradient(180deg, #ff7a1a, #b8410d);
@@ -919,6 +981,14 @@
     color: #fff;
     box-shadow: 0 4px 0 #2a0a4a, 0 0 16px rgba(136,255,68,0.4);
     text-shadow: 1px 2px 0 rgba(0,0,0,0.5);
+  }
+  .theme-opt.theme-mc-btn.active {
+    background: linear-gradient(180deg, #6fb43f 0 30%, #8b5a2b 30% 100%);
+    border-color: #ffffff;
+    border-radius: 6px;
+    color: #fff;
+    box-shadow: 0 4px 0 #4a2f15, 0 0 16px rgba(111,180,63,0.45);
+    text-shadow: 2px 2px 0 #3a2a1a;
   }
 
   /* ============ MONSTER THEME OVERRIDES ============ */
@@ -985,25 +1055,21 @@
   body.theme-monster .question .x { color: #ff44ff; }
   /* Answer input — keep readable but with green border */
   body.theme-monster .answer-input {
-    background: linear-gradient(180deg, #d0ffaa, #88ff44);
-    box-shadow:
-      0 6px 0 #2a4411,
-      inset 0 -4px 0 rgba(0,0,0,0.1);
-  }
-  body.theme-monster .answer-input:focus {
     background: linear-gradient(180deg, #e8ffcc, #aaff66);
     box-shadow:
       0 6px 0 #2a4411,
-      0 0 0 4px rgba(136,255,68,0.4);
+      0 0 0 4px rgba(136,255,68,0.35);
   }
+  body.theme-monster .key { background: linear-gradient(180deg, #f1e6ff, #cbb3ee); }
+  body.theme-monster .key-back { background: linear-gradient(180deg, #e8ffcc, #9be85c); }
   /* Submit + start = bloody red */
-  body.theme-monster .submit-btn,
+  body.theme-monster .key-go,
   body.theme-monster .start-btn,
   body.theme-monster .unlock-btn {
     background: linear-gradient(180deg, #ff3366, #aa0022);
     box-shadow: 0 6px 0 #770022;
   }
-  body.theme-monster .submit-btn:active,
+  body.theme-monster .key-go:active,
   body.theme-monster .start-btn:active,
   body.theme-monster .unlock-btn:active {
     box-shadow: 0 2px 0 #770022;
@@ -1074,17 +1140,224 @@
   /* Round summary highlight color */
   body.theme-monster .round-summary .rs-val { color: #88ff44; }
 
+  /* ============ MINECRAFT THEME OVERRIDES ============ */
+  /* Blokkig: kleine hoekjes, pixel-font, gras/aarde, steen en diamant */
+  body.theme-mc {
+    --bg-1: #1e3148;
+    --bg-2: #0c1016;
+    --gold: #5ce1e6;          /* diamant */
+    --gold-2: #3fb8bd;
+    --gold-deep: #1d5f62;
+    --orange: #6fb43f;        /* gras */
+    --orange-deep: #3f6e22;
+    --blue: #7a7a7a;          /* steen */
+    --blue-deep: #3b3b3b;
+    --green: #6fb43f;
+    --green-deep: #3f6e22;
+    --red: #e0443a;
+    --red-deep: #7a1a14;
+    --purple: #a96bd6;
+    --cyan: #5ce1e6;
+    --ink: #111111;
+    font-family: 'Pixelify Sans', 'Lilita One', monospace;
+    font-weight: 700;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(92,225,230,0.18) 0%, transparent 60%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  }
+  /* blokjes-raster op de achtergrond */
+  body.theme-mc::before {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  body.theme-mc .header h1,
+  body.theme-mc .start-hero h2 {
+    font-family: 'Pixelify Sans', monospace;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 3px 3px 0 #3a3a3a;
+    letter-spacing: 2px;
+  }
+  body.theme-mc .start-hero h2 { color: #ffe14d; text-shadow: 3px 3px 0 #5a4a00; }
+  body.theme-mc .header {
+    background: linear-gradient(180deg, #6fb43f 0 28%, #8b5a2b 28% 100%);
+    border-bottom-color: #4a2f15;
+  }
+  body.theme-mc .tbl-label { color: #fff; }
+  body.theme-mc .tbl-badge { border-radius: 6px; }
+  body.theme-mc .question-card,
+  body.theme-mc .table-picker,
+  body.theme-mc .progress-card,
+  body.theme-mc .collection,
+  body.theme-mc .unlock-box,
+  body.theme-mc .timeup-box {
+    border-radius: 6px;
+    background: linear-gradient(180deg, #4a4a52, #2e2e34);
+    border-color: #111;
+    box-shadow:
+      inset 3px 3px 0 rgba(255,255,255,0.18),
+      inset -3px -3px 0 rgba(0,0,0,0.35),
+      0 6px 0 #111;
+  }
+  body.theme-mc .question-card { border-color: #5ce1e6; box-shadow: inset 3px 3px 0 rgba(255,255,255,0.18), inset -3px -3px 0 rgba(0,0,0,0.35), 0 6px 0 #1d5f62; }
+  body.theme-mc .unlock-box { border-color: #5ce1e6; box-shadow: 0 10px 0 #1d5f62, 0 0 80px rgba(92,225,230,0.5); }
+  body.theme-mc .timeup-box { background: linear-gradient(180deg, #a3302a, #5a1410); }
+  body.theme-mc .question-card::before,
+  body.theme-mc .question-card::after,
+  body.theme-mc .table-picker::before,
+  body.theme-mc .table-picker::after {
+    content: "⛏";
+    color: rgba(255,255,255,0.06);
+    font-size: 7em;
+  }
+  body.theme-mc .question { -webkit-text-stroke: 0; text-shadow: 4px 4px 0 #111; }
+  body.theme-mc .question .x, body.theme-mc .question .gap { color: #ffe14d; }
+  body.theme-mc .answer-input {
+    border-radius: 4px;
+    background: #c6c6c6;
+    box-shadow: inset 3px 3px 0 #8b8b8b, inset -3px -3px 0 #fff, 0 5px 0 #111;
+    -webkit-text-stroke: 0;
+  }
+  body.theme-mc .key {
+    border-radius: 4px;
+    background: #c6c6c6;
+    color: #222;
+    box-shadow: inset 3px 3px 0 #fff, inset -3px -3px 0 #7a7a7a, 0 4px 0 #111;
+  }
+  body.theme-mc .key:active, body.theme-mc .key.pressed {
+    box-shadow: inset 3px 3px 0 #7a7a7a, inset -3px -3px 0 #fff, 0 1px 0 #111;
+  }
+  body.theme-mc .key-back { background: #d9a066; }
+  body.theme-mc .key-go,
+  body.theme-mc .start-btn,
+  body.theme-mc .unlock-btn,
+  body.theme-mc .timeup-btn {
+    border-radius: 6px;
+    background: #5a9e2f;
+    color: #fff;
+    -webkit-text-stroke: 0;
+    text-shadow: 3px 3px 0 #2a4a14;
+    box-shadow: inset 3px 3px 0 #8fd35e, inset -3px -3px 0 #3a6a1c, 0 5px 0 #111;
+  }
+  body.theme-mc .start-btn:disabled { background: #6b6b6b; box-shadow: inset 3px 3px 0 #999, inset -3px -3px 0 #444, 0 5px 0 #111; }
+  body.theme-mc .table-card { border-radius: 6px; -webkit-text-stroke: 0; text-shadow: 3px 3px 0 var(--ink); }
+  body.theme-mc .mode-opt,
+  body.theme-mc .theme-opt,
+  body.theme-mc .picker-quick,
+  body.theme-mc .pb-item,
+  body.theme-mc .stat,
+  body.theme-mc .brawler-slot { border-radius: 6px; }
+  body.theme-mc .mode-opt.active {
+    background: #5a9e2f;
+    border-color: #fff;
+    box-shadow: inset 3px 3px 0 #8fd35e, inset -3px -3px 0 #3a6a1c, 0 4px 0 #111;
+  }
+  body.theme-mc .mode-title, body.theme-mc .picker-title { -webkit-text-stroke: 0; }
+  body.theme-mc .pb-item { border-color: rgba(92,225,230,0.5); }
+  body.theme-mc .progress-bar-bg { border-radius: 2px; }
+  body.theme-mc .progress-bar-fill {
+    border-radius: 0;
+    background: linear-gradient(180deg, #b6ff6a, #7efc20 50%, #4fae0c);   /* XP-balk */
+    box-shadow: 0 0 10px rgba(126,252,32,0.6);
+  }
+  body.theme-mc .next-preview { border-radius: 4px; }
+  body.theme-mc .timer, body.theme-mc .home-btn { border-radius: 8px; }
+  body.theme-mc .timer {
+    background: #c6c6c6;
+    box-shadow: inset 3px 3px 0 #fff, inset -3px -3px 0 #7a7a7a, 0 6px 0 var(--ink);
+  }
+  body.theme-mc .timer.warn { background: #e0443a; box-shadow: 0 6px 0 var(--ink), 0 0 26px rgba(224,68,58,0.8); }
+  body.theme-mc .home-btn {
+    background: #c6c6c6;
+    box-shadow: inset 3px 3px 0 #fff, inset -3px -3px 0 #7a7a7a, 0 5px 0 var(--ink);
+  }
+  body.theme-mc .overlay { background: radial-gradient(ellipse at center, rgba(92,225,230,0.25), rgba(0,0,0,0.9)); }
+  body.theme-mc .unlock-banner { border-radius: 4px; background: #5a9e2f; }
+  body.theme-mc .unlock-name { -webkit-text-stroke: 0; text-shadow: 4px 4px 0 #111; }
+  body.theme-mc .collection-title { color: #ffe14d; }
+  body.theme-mc .creature-img { image-rendering: pixelated; }
+  /* Cijfers: in Pixelify lijkt een 5 op een S — daarom een pixel-font met duidelijke cijfers */
+  body.theme-mc .question, body.theme-mc .answer-input, body.theme-mc .key,
+  body.theme-mc .table-card, body.theme-mc .timer-num, body.theme-mc .stat-value,
+  body.theme-mc .pb-val, body.theme-mc .progress-frac, body.theme-mc .tbl-badge,
+  body.theme-mc .col-count, body.theme-mc .rs-val, body.theme-mc .feedback .ans,
+  body.theme-mc #progress-text strong, body.theme-mc .streak-msg, body.theme-mc #progress-text .num {
+    font-family: 'Press Start 2P', monospace;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  body.theme-mc .question { font-size: clamp(1.5em, min(7.6vw, 4.6vh), 2.8em); line-height: 1.3; }
+  body.theme-mc .answer-input { font-size: clamp(1.3em, min(6.5vw, 3.8vh), 2em); }
+  body.theme-mc .key { font-size: clamp(1em, min(5.2vw, 3vh), 1.5em); }
+  body.theme-mc .key-back { font-family: 'Pixelify Sans', sans-serif; font-size: 1.6em; }
+  body.theme-mc .table-card { font-size: clamp(1em, 4.2vw, 1.8em); }
+  body.theme-mc .timer-num { font-size: 1.2em; margin-top: 3px; }
+  body.theme-mc .stat-value, body.theme-mc .pb-val { font-size: 0.9em; }
+  body.theme-mc .tbl-badge { font-size: 0.75em; }
+  body.theme-mc .tables-badges.compact .tbl-badge { font-size: 0.6em; }
+  body.theme-mc .progress-frac, body.theme-mc .rs-val { font-size: 0.8em; }
+  body.theme-mc .col-count, body.theme-mc .feedback .ans,
+  body.theme-mc #progress-text strong, body.theme-mc .streak-msg, body.theme-mc #progress-text .num { font-size: 0.75em; }
+
+  /* ============ LAGE SCHERMEN (kleine telefoons, adresbalk zichtbaar) ============ */
+  @media (max-height: 720px) {
+    .game { padding: 8px 12px; gap: 8px; }
+    .progress-card { padding: 6px 10px; }
+    .next-preview { width: 44px; height: 44px; }
+    .next-preview img { width: 36px !important; height: 36px !important; }
+    .collection { padding: 5px 8px 6px; }
+    .collection-title { margin-bottom: 4px; font-size: 0.95em; }
+    .brawler-slot { width: 54px; min-width: 54px; height: 58px; padding: 3px; }
+    .brawler-slot .nm { display: none; }
+    .brawler-slot .emo img { width: 40px !important; height: 40px !important; }
+    .header { padding-top: 6px; padding-bottom: 6px; gap: 6px; }
+    .header h1 { font-size: 1.6em; }
+    .stats { padding: 4px 8px; }
+    .stat { padding: 3px 10px; }
+  }
+  @media (max-height: 700px) {
+    .start-screen { gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+    .start-hero h2 { font-size: 1.7em; }
+    .theme-opt { flex-direction: row; padding: 6px 3px; gap: 4px; font-size: 0.78em; letter-spacing: 0.5px; }
+    .theme-opt .theme-emoji { font-size: 1.2em; }
+    .pb-item { padding: 3px 6px; }
+    .table-picker { padding: 10px 12px; flex: 0 0 auto; }
+    .mode-toggle { margin-bottom: 8px; }
+    .mode-opt { padding: 6px 6px; }
+    .mode-sub { display: none; }
+    .picker-title { font-size: 1em; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .picker-actions { margin-top: 8px; }
+    .picker-quick { padding: 4px 16px; }
+    .start-btn { padding: 11px; font-size: 1.4em; }
+  }
+  @media (max-height: 600px) {
+    .collection { display: none !important; }
+    .question-card { padding: 8px; gap: 4px; }
+    .numpad { gap: 6px; min-height: 140px; }
+  }
+
+  /* ============ MINDER BEWEGING ============ */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .particle, .confetti { display: none; }
+  }
+
   /* small spacing for very narrow */
   @media (max-width: 480px) {
-    .timer { width: 68px; height: 68px; top: 10px; right: 10px; }
+    .timer { width: 68px; height: 68px; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right)); }
     .timer-num { font-size: 1.6em; }
   }
 </style>
 </head>
 <body>
 
-<button class="home-btn hidden" id="home-btn" title="Terug naar startscherm">🏠</button>
-<button class="mute-btn" id="mute-btn" title="Geluid aan/uit">🔊</button>
+<button class="home-btn hidden" id="home-btn" title="Terug naar startscherm" aria-label="Terug naar startscherm">🏠</button>
 
 <div class="timer hidden" id="timer">
   <div class="timer-label">TIJD</div>
@@ -1096,6 +1369,7 @@
   <div class="start-hero">
     <h2>⚡ TAFELS BRAWL ⚡</h2>
     <p>★ KIES JE TAFELS ★</p>
+    <button class="mute-btn" type="button" aria-label="Geluid aan/uit">🔊</button>
   </div>
   <div class="theme-switcher" id="theme-switcher">
     <button class="theme-opt theme-brawl-btn active" data-theme="brawl" type="button">
@@ -1106,11 +1380,15 @@
       <span class="theme-emoji">👻</span>
       <span class="theme-label">MONSTERS</span>
     </button>
+    <button class="theme-opt theme-mc-btn" data-theme="mc" type="button">
+      <span class="theme-emoji">⛏️</span>
+      <span class="theme-label">MINECRAFT</span>
+    </button>
   </div>
   <div class="pb-panel" id="pb-panel">
-    <div class="pb-item"><span class="pb-ico">🏆</span><span class="pb-lbl">TOP SCORE</span><span class="pb-val" id="pb-score">0</span></div>
-    <div class="pb-item"><span class="pb-ico">🔥</span><span class="pb-lbl">LANGSTE STREAK</span><span class="pb-val" id="pb-streak">0</span></div>
-    <div class="pb-item"><span class="pb-ico">🎮</span><span class="pb-lbl">MEESTE BRAWLERS</span><span class="pb-val" id="pb-brawlers">0</span></div>
+    <div class="pb-item"><span class="pb-ico">🏆</span><span class="pb-txt"><span class="pb-lbl">TOP SCORE</span><span class="pb-val" id="pb-score">0</span></span></div>
+    <div class="pb-item"><span class="pb-ico">🔥</span><span class="pb-txt"><span class="pb-lbl">STREAK</span><span class="pb-val" id="pb-streak">0</span></span></div>
+    <div class="pb-item"><span class="pb-ico" id="pb-col-ico">🎮</span><span class="pb-txt"><span class="pb-lbl" id="pb-col-lbl">BRAWLERS</span><span class="pb-val" id="pb-brawlers">0</span></span></div>
   </div>
   <div class="table-picker">
     <div class="mode-toggle" id="mode-toggle">
@@ -1149,6 +1427,7 @@
 <div class="stats hidden" id="stats">
   <div class="stat"><span class="ico">⭐</span><span>PUNTEN</span><span class="stat-value" id="score">0</span></div>
   <div class="stat"><span class="ico">🔥</span><span>STREAK</span><span class="stat-value" id="streak">0</span></div>
+  <button class="mute-btn" type="button" aria-label="Geluid aan/uit">🔊</button>
 </div>
 
 <div class="game hidden" id="game">
@@ -1167,12 +1446,24 @@
 
   <div class="question-card">
     <div class="question" id="question">7 <span class="x">×</span> 3 = ?</div>
-    <form class="answer-row" id="answer-form" autocomplete="off">
-      <input class="answer-input" id="answer-input" type="number" inputmode="numeric" pattern="[0-9]*" />
-      <button class="submit-btn" type="submit">GO!</button>
-    </form>
+    <div class="answer-row" id="answer-row">
+      <div class="answer-input" id="answer-input" role="status" aria-live="polite" aria-label="Jouw antwoord"></div>
+    </div>
     <div class="feedback" id="feedback"></div>
-    <div class="streak-msg" id="streak-msg"></div>
+    <div class="numpad" id="numpad">
+      <button class="key" type="button" data-k="1">1</button>
+      <button class="key" type="button" data-k="2">2</button>
+      <button class="key" type="button" data-k="3">3</button>
+      <button class="key" type="button" data-k="4">4</button>
+      <button class="key" type="button" data-k="5">5</button>
+      <button class="key" type="button" data-k="6">6</button>
+      <button class="key" type="button" data-k="7">7</button>
+      <button class="key" type="button" data-k="8">8</button>
+      <button class="key" type="button" data-k="9">9</button>
+      <button class="key key-back" type="button" data-k="back" aria-label="Wissen">⌫</button>
+      <button class="key" type="button" data-k="0">0</button>
+      <button class="key key-go" type="button" data-k="go">GO!</button>
+    </div>
   </div>
 
   <div class="collection">
@@ -1337,8 +1628,9 @@ const BIMG = {
     { id:16000063, name:"Chester",  emoji:"🃏", color:"#ff5fd0", bg:"#2a0a22", rarity:"LEGENDARY",   rc:"#ffd028" },
   ];
   // Helper: img with emoji fallback
+  function imgSrc(c) { return c.img || IMG(c.id); }
   function brawlerImgHTML(b, size) {
-    return `<img src="${IMG(b.id)}" alt="${b.name}" style="width:${size};height:${size};object-fit:contain;filter:drop-shadow(0 3px 4px rgba(0,0,0,0.5));" onerror="this.outerHTML='<span style=\\'font-size:${size};line-height:1\\'>${b.emoji}</span>'">`;
+    return `<img class="creature-img" src="${imgSrc(b)}" alt="${b.name}" style="width:${size};height:${size};object-fit:contain;filter:drop-shadow(0 3px 4px rgba(0,0,0,0.5));" onerror="this.outerHTML='<span style=\\'font-size:${size};line-height:1\\'>${b.emoji}</span>'">`;
   }
 
   // ============ MONSTERS ============
@@ -1370,112 +1662,321 @@ const BIMG = {
     { id:'1f9de', emoji:"🧞",  name:"Wensbaas",      color:"#cc88ff", bg:"#220a33", rarity:"LEGENDE",   rc:"#ffd028" },
   ];
 
+  // ============ MINECRAFT MOBS ============
+  // Pixel-art gezichten (8x8), bij het laden getekend op een canvas —
+  // geen losse afbeeldingen nodig. '.' = doorzichtig.
+  const MOBS = [
+    { id:'mc-pig', name:'Pig', emoji:'🐷', color:'#f0a5a2', bg:'#3a1a1a', rarity:'GEWOON', rc:'#ffffff',
+      pal:{p:'#f0a5a2',P:'#e38f8c',s:'#f7c4c1',n:'#7a3b3a',w:'#ffffff',k:'#111111'},
+      px:['pppppppp','pPppppPp','pwkppkwp','pppppppp','ppsssspp','ppnssnpp','pppppppp','pPppppPp'] },
+    { id:'mc-cow', name:'Cow', emoji:'🐮', color:'#e8e8e8', bg:'#2a1f18', rarity:'GEWOON', rc:'#ffffff',
+      pal:{b:'#3b2a20',w:'#e8e8e8',k:'#111111',m:'#b5b5b5',n:'#555555',h:'#d6d6c6'},
+      px:['hbbbbbbh','bbwwbbbb','bwkbbkwb','bbbbwwbb','bbmmmmbb','bmnmmnmb','bbmmmmbb','bbbbbbbb'] },
+    { id:'mc-sheep', name:'Sheep', emoji:'🐑', color:'#eeeeee', bg:'#2a2a2a', rarity:'GEWOON', rc:'#ffffff',
+      pal:{w:'#eeeeee',W:'#d0d0d0',f:'#d6b99a',k:'#111111',p:'#e8a0a0'},
+      px:['wwWwwWww','wWwwwwWw','wffffffw','wfkffkfw','wffffffw','wffppffw','wWffffWw','wwwwwwww'] },
+    { id:'mc-chicken', name:'Chicken', emoji:'🐔', color:'#f4f4f4', bg:'#2a2410', rarity:'GEWOON', rc:'#ffffff',
+      pal:{w:'#f4f4f4',W:'#dcdcdc',k:'#111111',y:'#f2b233',Y:'#d8901a',r:'#d63a2a'},
+      px:['wwwwwwww','wWwwwwWw','wkwwwwkw','wwyyyyww','wwYYYYww','wwwrrwww','wwwrrwww','wWwwwwWw'] },
+    { id:'mc-zombie', name:'Zombie', emoji:'🧟', color:'#58a04c', bg:'#10240d', rarity:'GEWOON', rc:'#ffffff',
+      pal:{h:'#2f5a2a',z:'#58a04c',Z:'#4a8a40',k:'#1f2f1f',n:'#3e7a34',m:'#2d4a28'},
+      px:['hhhhhhhh','hhhhhhhh','zzZzzzZz','zkkzzkkz','zzznnzzz','zZmmmmZz','zzzzzzzz','zZzzzzZz'] },
+    { id:'mc-skeleton', name:'Skeleton', emoji:'💀', color:'#c8c8c8', bg:'#1f1f1f', rarity:'GEWOON', rc:'#ffffff',
+      pal:{w:'#c8c8c8',W:'#a8a8a8',k:'#1c1c1c',d:'#555555'},
+      px:['wwwwWwww','wWwwwwww','wkkwwkkw','wWwwwwWw','wwwkkwww','wddddddw','wwwwwwww','wWwwwwWw'] },
+    { id:'mc-creeper', name:'Creeper', emoji:'💥', color:'#5dbb45', bg:'#0f2a0f', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{g:'#5dbb45',G:'#4a9a36',L:'#7fd360',K:'#111111'},
+      px:['gLgGggLg','GggggGgg','gKKggKKg','gKKggKKg','LggKKggG','ggKKKKgg','gGKKKKgg','gGKggKgL'] },
+    { id:'mc-spider', name:'Spider', emoji:'🕷️', color:'#c8201e', bg:'#1a1212', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{b:'#3a3432',B:'#2a2524',r:'#c8201e',R:'#ff5a4a'},
+      px:['bBbbbbBb','bbbbbbbb','bbbbbbbb','bRrbbrRb','BrrbbrrB','bbbbbbbb','bbrbbrbb','bBbbbbBb'] },
+    { id:'mc-slime', name:'Slime', emoji:'🟩', color:'#7ec86a', bg:'#12280e', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{g:'#7ec86a',G:'#5aa84a',d:'#2f6a28',L:'#a8e39a'},
+      px:['LggggggG','gGggggGg','gddggddg','gddggddg','ggggdggg','gggggggg','gGggggGg','GggggggG'] },
+    { id:'mc-villager', name:'Villager', emoji:'🧑‍🌾', color:'#bd8b72', bg:'#2a1a12', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{s:'#bd8b72',S:'#a8745c',b:'#4a2d1f',g:'#2e8a3a',n:'#a06850',w:'#ffffff'},
+      px:['ssssssss','sSssssSs','sbbbbbbs','swgssgws','sssnnsss','sssnnsss','ssSnnSss','sssnnsss'] },
+    { id:'mc-wolf', name:'Wolf', emoji:'🐺', color:'#d8d8d8', bg:'#1f2226', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{g:'#d8d8d8',G:'#bcbcbc',w:'#ffffff',k:'#111111',n:'#2a2a2a'},
+      px:['GggggggG','gggggggg','gkggggkg','gggggggg','ggwwwwgg','ggwnnwgg','ggwwwwgg','gGggggGg'] },
+    { id:'mc-bee', name:'Bee', emoji:'🐝', color:'#f2c233', bg:'#2a2208', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{y:'#f2c233',Y:'#e0a822',k:'#1a1a1a',c:'#7ec8e3'},
+      px:['yyyyyyyy','yYyyyyYy','yckyyckY','yyyyyyyy','kkkkkkkk','yyyyyyyy','kkkkkkkk','yyyyyyyy'] },
+    { id:'mc-frog', name:'Frog', emoji:'🐸', color:'#d9793a', bg:'#2a1608', rarity:'ONGEWOON', rc:'#ffff55',
+      pal:{o:'#d9793a',O:'#b85e25',y:'#f2d26a',k:'#111111',w:'#ffffff',g:'#8a4a1a'},
+      px:['wkw..wkw','oooooooo','oOoooooO','oooooooo','gggggggg','yyyyyyyy','yyyyyyyy','oyyyyyyo'] },
+    { id:'mc-fox', name:'Fox', emoji:'🦊', color:'#e37c2b', bg:'#2a1606', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{o:'#e37c2b',O:'#c9651a',w:'#f2efe6',k:'#111111',n:'#2a2a2a'},
+      px:['oOoooooO','oooooooo','okooooko','wwooooww','wwwwwwww','wwwnnwww','wwwwwwww','OwwwwwwO'] },
+    { id:'mc-axolotl', name:'Axolotl', emoji:'🦎', color:'#f2a3c8', bg:'#2a1020', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{p:'#f2a3c8',P:'#e07aab',g:'#c2447a',k:'#1a1a1a'},
+      px:['gg....gg','gppppppg','pPppppPp','pkppppkp','pppppppp','pppPPppp','pppppppp','pPppppPp'] },
+    { id:'mc-enderman', name:'Enderman', emoji:'👾', color:'#e079fa', bg:'#140a1a', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{k:'#161616',K:'#0d0d0d',p:'#e079fa',P:'#cc00fa'},
+      px:['kkkkkkkk','kKkkkkKk','kkkkkkkk','kkkkkkkk','PpPkkPpP','kkkkkkkk','kKkkkkKk','kkkkkkkk'] },
+    { id:'mc-golem', name:'Iron Golem', emoji:'🗿', color:'#d8d0c8', bg:'#22201e', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{i:'#d8d0c8',I:'#bfb5aa',k:'#7a1a1a',b:'#8a7f75',n:'#b3a89c',v:'#5f8a3a'},
+      px:['iiiiiiii','iIiiiiIi','ibbbbbbi','ikiiiiki','iiinniii','iiinniii','iIinnIii','viiiiiiv'] },
+    { id:'mc-allay', name:'Allay', emoji:'🧚', color:'#6ec6ff', bg:'#0a2033', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{b:'#6ec6ff',B:'#4aa6e6',w:'#dff4ff',k:'#1a3a5a'},
+      px:['bbbbbbbb','bBbbbbBb','bwkbbkwb','bbbbbbbb','bbbwwbbb','bbbbbbbb','bBbbbbBb','bbbbbbbb'] },
+    { id:'mc-steve', name:'Steve', emoji:'🧑', color:'#3b52a5', bg:'#101a33', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{h:'#2b1e0e',s:'#bb8a6a',S:'#a87a5a',w:'#ffffff',b:'#3b52a5',n:'#8a5a3e',m:'#6a3a2a'},
+      px:['hhhhhhhh','hhhhhhhh','hssssssh','swbssbws','sssnnsss','ssmssmss','ssmmmmss','ssssssss'] },
+    { id:'mc-alex', name:'Alex', emoji:'👧', color:'#d9772b', bg:'#2a1606', rarity:'ZELDZAAM', rc:'#55ffff',
+      pal:{h:'#d9772b',s:'#f0c8a0',w:'#ffffff',g:'#4aa84a',m:'#c07060'},
+      px:['hhhhhhhh','hhhhhhhs','hhssssss','swgssgws','ssssssss','sssmmsss','ssssssss','ssssssss'] },
+    { id:'mc-blaze', name:'Blaze', emoji:'🔥', color:'#f7d23b', bg:'#2a1a00', rarity:'EPISCH', rc:'#ff55ff',
+      pal:{y:'#f7d23b',Y:'#e0a822',o:'#f28a1b',k:'#3a2a00',d:'#8a5a00'},
+      px:['yyyyyyyy','yYyyyyYy','ykkyykky','yyyyyyyy','yyoooyyy','yddddddy','yYyyyyYy','oyyyyyyo'] },
+    { id:'mc-ghast', name:'Ghast', emoji:'👻', color:'#f0f0f0', bg:'#2a1414', rarity:'EPISCH', rc:'#ff55ff',
+      pal:{w:'#f0f0f0',W:'#d8d8d8',k:'#555555',K:'#222222',r:'#c0392b'},
+      px:['wwwwwwww','wWwwwwWw','wkkwwkkw','wrwwwwrw','wwwwwwww','wwKKKKww','wwKKKKww','wWwwwwWw'] },
+    { id:'mc-piglin', name:'Piglin', emoji:'🐗', color:'#e8a3a0', bg:'#2a1210', rarity:'EPISCH', rc:'#ff55ff',
+      pal:{p:'#e8a3a0',P:'#d48986',s:'#f2c1bd',n:'#6a2a28',w:'#ffffff',k:'#111111',t:'#f2f2e0'},
+      px:['pPppppPp','pppppppp','pwkppkwp','pppppppp','ppsssspp','tpnssnpt','tppppppt','pPppppPp'] },
+    { id:'mc-wither-skel', name:'Wither Skeleton', emoji:'☠️', color:'#6a6a6a', bg:'#111111', rarity:'EPISCH', rc:'#ff55ff',
+      pal:{d:'#3a3a3a',D:'#2a2a2a',k:'#0d0d0d',g:'#666666'},
+      px:['dddddddd','dDddddDd','dkkddkkd','dDddddDd','dddkkddd','dggggggd','dddddddd','dDddddDd'] },
+    { id:'mc-warden', name:'Warden', emoji:'🦇', color:'#29dfeb', bg:'#06181c', rarity:'LEGENDARISCH', rc:'#ffaa00',
+      pal:{d:'#0f3d44',D:'#0a2a30',c:'#29dfeb',C:'#8ff5ff',k:'#062026'},
+      px:['cDddddDc','dddddddd','dDddddDd','dCddddCd','dddddddd','ddkkkkdd','dckkkkcd','dddddddd'] },
+    { id:'mc-dragon', name:'Ender Dragon', emoji:'🐉', color:'#b000e0', bg:'#0e0614', rarity:'LEGENDARISCH', rc:'#ffaa00',
+      pal:{k:'#1a1a1a',K:'#0e0e0e',g:'#2e2e2e',p:'#e079fa',P:'#b000e0',w:'#dddddd'},
+      px:['gkkkkkkg','kKkkkkKk','kPpkkpPk','kkkkkkkk','kggggggk','kgKggKgk','kggggggk','wkkkkkkw'] },
+  ];
+  function pixelArt(rows, pal, scale = 8) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 8 * scale;
+    const ctx = c.getContext('2d');
+    rows.forEach((row, y) => {
+      [...row].forEach((ch, x) => {
+        if (ch === '.' || !pal[ch]) return;
+        ctx.fillStyle = pal[ch];
+        ctx.fillRect(x * scale, y * scale, scale, scale);
+      });
+    });
+    return c.toDataURL('image/png');
+  }
+  MOBS.forEach(m => { try { m.img = pixelArt(m.px, m.pal); } catch (e) {} });
+
   // ============ THEMES ============
   const THEMES = {
     brawl: {
       cls: 'theme-brawl',
       creatures: BRAWLERS,
+      color: '#1b1745',
+      docTitle: 'Tafels Brawl',
       title: '⚡ TAFELS BRAWL ⚡',
       titleGame: 'TAFELS BRAWL',
       heroSub: '★ KIES JE TAFELS ★',
       pickerTitle: 'WELKE TAFELS WIL JE OEFENEN?',
       collectionTitle: 'JOUW BRAWLERS',
       unlockBanner: 'NIEUWE BRAWLER!',
-      pbLabel: 'MEESTE BRAWLERS',
-      pbKey: 'brawlers',
+      pbLabel: 'BRAWLERS',
+      pbIcon: '🎮',
       rewardWord: 'brawler',
+      rewardWords: 'brawlers',
       rewardWordCap: 'Brawler',
       timeupText: 'Geen brawler deze ronde — try again!',
+      particles: ['⭐','✨','💫','🌟','💥'],
+      confetti: ['#ffcc00','#ff7a1a','#2ad96e','#8a3aff','#3ad6ff','#ff3b5c'],
     },
     monster: {
       cls: 'theme-monster',
       creatures: MONSTERS,
+      color: '#1a0828',
+      docTitle: 'Tafel Monsters',
       title: '👻 TAFEL MONSTERS 👹',
       titleGame: 'TAFEL MONSTERS',
       heroSub: '★ KIES JE TAFELS ★',
       pickerTitle: 'WELKE TAFELS WIL JE OEFENEN?',
       collectionTitle: 'JOUW MONSTERS',
       unlockBanner: 'NIEUW MONSTER!',
-      pbLabel: 'MEESTE MONSTERS',
-      pbKey: 'monsters',
+      pbLabel: 'MONSTERS',
+      pbIcon: '👻',
       rewardWord: 'monster',
+      rewardWords: 'monsters',
       rewardWordCap: 'Monster',
       timeupText: 'Geen monster gevangen — probeer opnieuw!',
+      particles: ['👻','✨','💀','🕸️','⭐'],
+      confetti: ['#88ff44','#ff44ff','#aa44ff','#ff0044','#66ffcc'],
+    },
+    mc: {
+      cls: 'theme-mc',
+      creatures: MOBS,
+      color: '#1e3148',
+      docTitle: 'Tafelcraft',
+      title: '⛏️ TAFELCRAFT ⛏️',
+      titleGame: 'TAFELCRAFT',
+      heroSub: '★ KIES JE TAFELS ★',
+      pickerTitle: 'WELKE TAFELS WIL JE OEFENEN?',
+      collectionTitle: 'JOUW MOBS',
+      unlockBanner: 'NIEUWE MOB!',
+      pbLabel: 'MOBS',
+      pbIcon: '⛏️',
+      rewardWord: 'mob',
+      rewardWords: 'mobs',
+      rewardWordCap: 'Mob',
+      timeupText: 'Geen mob gevangen — nog een keer!',
+      particles: ['💎','⭐','✨','🟩','🟫'],
+      confetti: ['#6fb43f','#8b5a2b','#5ce1e6','#ffe14d','#c6c6c6','#7efc20'],
     },
   };
 
+  // ============ OPSLAG (veilig: werkt ook als localStorage geblokkeerd is) ============
+  function readStore(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function writeStore(key, val) {
+    try { localStorage.setItem(key, val); } catch (e) {}
+  }
+  function readJSON(key, fallback) {
+    try { const v = JSON.parse(readStore(key)); return v && typeof v === 'object' ? v : fallback; }
+    catch (e) { return fallback; }
+  }
+
   const THEME_KEY = 'tafels_theme';
-  let activeTheme = localStorage.getItem(THEME_KEY) || 'brawl';
+  const COL_KEY   = 'tafels_collection_v1';   // { theme: { order:[ids], unlocked:n } }
+  const FACT_KEY  = 'tafels_facts_v1';        // { "7x6": { l:0-3, c, w } }
+  const PACE_KEY  = 'tafels_pace_v1';         // seconden per goed antwoord (toets-timer)
+  let activeTheme = readStore(THEME_KEY) || 'brawl';
   if (!THEMES[activeTheme]) activeTheme = 'brawl';
   let queue = [];
+
+  // Schudden binnen elke zeldzaamheid, zodat je eerst gewone en later zeldzame
+  // personages verdient (de lijsten staan al op volgorde van zeldzaamheid).
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function tieredShuffle(creatures) {
+    const tiers = [];
+    const byRarity = new Map();
+    creatures.forEach(c => {
+      if (!byRarity.has(c.rarity)) { byRarity.set(c.rarity, []); tiers.push(c.rarity); }
+      byRarity.get(c.rarity).push(c);
+    });
+    return tiers.flatMap(r => shuffle(byRarity.get(r)));
+  }
+
+  function loadThemeCollection(name) {
+    const t = THEMES[name];
+    const saved = readJSON(COL_KEY, {})[name];
+    const byId = new Map(t.creatures.map(c => [String(c.id), c]));
+    if (saved && Array.isArray(saved.order)) {
+      const order = saved.order.map(id => byId.get(String(id))).filter(Boolean);
+      const seen = new Set(order.map(c => String(c.id)));
+      const extra = tieredShuffle(t.creatures.filter(c => !seen.has(String(c.id))));
+      queue = [...order, ...extra];
+      unlocked = Math.max(0, Math.min(saved.unlocked | 0, queue.length));
+    } else {
+      queue = tieredShuffle(t.creatures);
+      unlocked = 0;
+    }
+  }
+  function saveCollection() {
+    const all = readJSON(COL_KEY, {});
+    all[activeTheme] = { order: queue.map(c => c.id), unlocked };
+    writeStore(COL_KEY, JSON.stringify(all));
+  }
 
   function applyTheme(name) {
     if (!THEMES[name]) name = 'brawl';
     const themeChanged = name !== activeTheme;
     activeTheme = name;
-    localStorage.setItem(THEME_KEY, name);
+    writeStore(THEME_KEY, name);
     const t = THEMES[name];
 
-    document.body.classList.remove('theme-brawl', 'theme-monster');
+    document.body.classList.remove('theme-brawl', 'theme-monster', 'theme-mc');
     document.body.classList.add(t.cls);
+    document.title = t.docTitle;
+    const metaColor = document.querySelector('meta[name="theme-color"]');
+    if (metaColor) metaColor.setAttribute('content', t.color);
 
-    // rebuild queue + reset session counters when theme actually changes
-    queue = [...t.creatures].sort(() => Math.random() - 0.5);
+    loadThemeCollection(name);
     if (themeChanged) {
-      score = 0; streak = 0; unlocked = 0; roundCorrect = 0;
+      score = 0; streak = 0; roundCorrect = 0;
       recentQuestions = []; wrongQueue = [];
-      const sEl = document.getElementById('score');     if (sEl) sEl.textContent = 0;
-      const stEl = document.getElementById('streak');   if (stEl) stEl.textContent = 0;
+      document.getElementById('score').textContent = 0;
+      document.getElementById('streak').textContent = 0;
     }
 
-    // update text labels
-    const startHero = document.querySelector('.start-hero h2');
-    if (startHero) startHero.textContent = t.title;
-    const headerH1 = document.querySelector('.header h1');
-    if (headerH1) headerH1.textContent = t.titleGame;
-    const pickerT = document.querySelector('.picker-title');
-    if (pickerT) pickerT.textContent = t.pickerTitle;
-    updateCollectionTitle();
-    const unlockBan = document.querySelector('.unlock-banner');
-    if (unlockBan) unlockBan.textContent = t.unlockBanner;
-    const pbBrawLbl = document.querySelector('#pb-panel .pb-item:nth-child(3) .pb-lbl');
-    if (pbBrawLbl) pbBrawLbl.textContent = t.pbLabel;
-    const timeupP = document.querySelector('.timeup-box p');
-    if (timeupP) timeupP.textContent = t.timeupText;
-
-    // update theme toggle UI
-    document.querySelectorAll('.theme-opt').forEach(b => {
-      b.classList.toggle('active', b.dataset.theme === name);
+    // teksten
+    document.querySelector('.start-hero h2').textContent = t.title;
+    document.querySelector('.start-hero p').textContent = t.heroSub;
+    document.querySelector('.header h1').textContent = t.titleGame;
+    document.querySelector('.picker-title').textContent = t.pickerTitle;
+    document.querySelector('.unlock-banner').textContent = t.unlockBanner;
+    document.querySelector('.timeup-box p').textContent = t.timeupText;
+    document.getElementById('pb-col-lbl').textContent = t.pbLabel;
+    document.getElementById('pb-col-ico').textContent = t.pbIcon;
+    const subs = { toets: `tijd + ${t.rewardWords}`, missie: `${t.rewardWords}, rustig`, vrij: 'puur oefenen' };
+    document.querySelectorAll('.mode-opt').forEach(b => {
+      b.querySelector('.mode-sub').textContent = subs[b.dataset.mode];
     });
 
-    // refresh dynamic things
+    document.querySelectorAll('.theme-opt').forEach(b => {
+      const on = b.dataset.theme === name;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on);
+    });
+
     renderPB();
     renderCollection();
   }
 
   // ============ STATE ============
   const ALL_TABLES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  const ROUND_TIME = 30;        // seconden per ronde
-  const FIRST_GOAL = 3;         // eerste brawler: 3 goed
+  const FIRST_GOAL = 3;         // eerste personage: 3 goed
   const ROUND_GOAL = 5;         // daarna: 5 goed per ronde
   const PB_KEY = 'tafels_pb';
   const MUTE_KEY = 'tafels_muted';
+  const MAX_DIGITS = 3;         // 11 × 10 = 110
 
   let TABLES = [3, 4, 6, 9];
   let selectedTables = new Set([3, 4, 6, 9]);
-  let mode = 'toets';           // 'toets' | 'vrij'
+  let mode = 'toets';           // 'toets' | 'missie' | 'vrij'
   let score = 0;
   let streak = 0;
   let unlocked = 0;
   let roundCorrect = 0;
   let current = null;
   let locked = false;
-  let timeLeft = ROUND_TIME;
+  let gameActive = false;
+  let phase = 'answer';         // 'answer' | 'fix' (fout antwoord overtypen)
+  let typed = '';
+  let timeLeft = 30;
+  let roundTime = 30;
   let tickInterval = null;
-  let muted = localStorage.getItem(MUTE_KEY) === '1';
-  let recentQuestions = [];     // last N keys to avoid repeats
-  let wrongQueue = [];          // questions to revisit
+  let pausedByHide = false;
+  let muted = readStore(MUTE_KEY) === '1';
+  let recentQuestions = [];     // laatste sommen, om herhaling te voorkomen
+  let wrongQueue = [];          // fout gemaakte sommen die snel terugkomen
   let roundStats = { total: 0, correct: 0, perTable: {}, startedAt: 0 };
+  let facts = readJSON(FACT_KEY, {});
+  let pace = parseFloat(readStore(PACE_KEY));
+  if (!(pace >= 5 && pace <= 12)) pace = 8;
+
+  // Alle vertraagde acties lopen via later(), zodat terug naar start of
+  // "tijd op" ze kan annuleren (anders verschijnt er een beloning op het startscherm).
+  let pending = [];
+  function later(fn, ms) {
+    const id = setTimeout(() => {
+      pending = pending.filter(x => x !== id);
+      fn();
+    }, ms);
+    pending.push(id);
+    return id;
+  }
+  function cancelPending() {
+    pending.forEach(clearTimeout);
+    pending = [];
+  }
 
   // ============ SOUND ============
   let audioCtx = null;
@@ -1521,38 +2022,56 @@ const BIMG = {
     tone(330, 0.25, 'sawtooth', 0.13, 0.15);
     tone(220, 0.40, 'sawtooth', 0.13, 0.30);
   }
+  function playKey() { tone(520, 0.04, 'square', 0.04); }
   function setMuted(m) {
     muted = m;
-    localStorage.setItem(MUTE_KEY, m ? '1' : '0');
-    const btn = document.getElementById('mute-btn');
-    btn.textContent = muted ? '🔇' : '🔊';
-    btn.classList.toggle('muted', muted);
-    btn.title = muted ? 'Geluid aanzetten' : 'Geluid uitzetten';
+    writeStore(MUTE_KEY, m ? '1' : '0');
+    document.querySelectorAll('.mute-btn').forEach(btn => {
+      btn.textContent = muted ? '🔇' : '🔊';
+      btn.classList.toggle('muted', muted);
+      btn.title = muted ? 'Geluid aanzetten' : 'Geluid uitzetten';
+      btn.setAttribute('aria-label', btn.title);
+    });
   }
-  document.getElementById('mute-btn').onclick = () => setMuted(!muted);
+  document.querySelectorAll('.mute-btn').forEach(btn => {
+    btn.onclick = () => setMuted(!muted);
+  });
   setMuted(muted);
 
   // ============ PERSONAL BEST ============
-  function loadPB() {
-    try { return JSON.parse(localStorage.getItem(PB_KEY) || '{}'); }
-    catch(e) { return {}; }
-  }
-  function savePB(pb) { localStorage.setItem(PB_KEY, JSON.stringify(pb)); }
+  function loadPB() { return readJSON(PB_KEY, {}); }
   function updatePB() {
     const pb = loadPB();
-    const key = THEMES[activeTheme].pbKey;
     let changed = false;
-    if (score    > (pb.score    || 0)) { pb.score    = score;    changed = true; }
-    if (streak   > (pb.streak   || 0)) { pb.streak   = streak;   changed = true; }
-    if (unlocked > (pb[key]     || 0)) { pb[key]     = unlocked; changed = true; }
-    if (changed) savePB(pb);
+    if (score  > (pb.score  || 0)) { pb.score  = score;  changed = true; }
+    if (streak > (pb.streak || 0)) { pb.streak = streak; changed = true; }
+    if (changed) writeStore(PB_KEY, JSON.stringify(pb));
   }
   function renderPB() {
     const pb = loadPB();
-    const key = THEMES[activeTheme].pbKey;
-    document.getElementById('pb-score').textContent    = pb.score    || 0;
-    document.getElementById('pb-streak').textContent   = pb.streak   || 0;
-    document.getElementById('pb-brawlers').textContent = pb[key]     || 0;
+    document.getElementById('pb-score').textContent    = pb.score  || 0;
+    document.getElementById('pb-streak').textContent   = pb.streak || 0;
+    document.getElementById('pb-brawlers').textContent = `${unlocked}/${queue.length}`;
+  }
+
+  // ============ SOMMEN-GEHEUGEN (over sessies heen) ============
+  // Per som een niveau 0–3: goed = +1, fout = terug naar 0.
+  // Sommen met een laag niveau komen vaker voorbij.
+  function factKey(table, num) { return table + 'x' + num; }
+  function factLevel(table, num) { const f = facts[factKey(table, num)]; return f ? f.l : 0; }
+  function recordFact(table, num, correct) {
+    const k = factKey(table, num);
+    const f = facts[k] || { l: 0, c: 0, w: 0 };
+    if (correct) { f.c++; f.l = Math.min(3, f.l + 1); }
+    else         { f.w++; f.l = 0; }
+    facts[k] = f;
+    writeStore(FACT_KEY, JSON.stringify(facts));
+  }
+  function tableStars(table) {
+    let sum = 0;
+    for (let n = 1; n <= 10; n++) sum += factLevel(table, n);
+    const m = sum / 30;
+    return m >= 0.95 ? 3 : m >= 0.6 ? 2 : m >= 0.3 ? 1 : 0;
   }
 
   // ============ ROUND STATS ============
@@ -1598,9 +2117,16 @@ const BIMG = {
     grid.innerHTML = '';
     ALL_TABLES.forEach(t => {
       const btn = document.createElement('button');
-      btn.className = 'table-card' + (selectedTables.has(t) ? ' selected' : '');
+      const on = selectedTables.has(t);
+      const stars = tableStars(t);
+      btn.type = 'button';
+      btn.className = 'table-card has-stars' + (on ? ' selected' : '');
       btn.dataset.t = t;
-      btn.textContent = t;
+      btn.setAttribute('aria-pressed', on);
+      btn.setAttribute('aria-label', `Tafel van ${t}, ${stars} van 3 sterren`);
+      btn.innerHTML = `${t}<span class="tc-stars" aria-hidden="true">` +
+        [0, 1, 2].map(i => `<span class="${i < stars ? 'on' : ''}">★</span>`).join('') +
+        `</span>`;
       btn.onclick = () => {
         if (selectedTables.has(t)) selectedTables.delete(t);
         else selectedTables.add(t);
@@ -1633,14 +2159,19 @@ const BIMG = {
   document.getElementById('start-btn').onclick = () => {
     if (selectedTables.size === 0) return;
     TABLES = [...selectedTables].sort((a,b) => a-b);
+    getAudio();   // audio ontgrendelen binnen een tik (iOS)
     startGame();
   };
 
   // Mode toggle
   document.querySelectorAll('.mode-opt').forEach(btn => {
     btn.onclick = () => {
-      document.querySelectorAll('.mode-opt').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.mode-opt').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       mode = btn.dataset.mode;
       updateStartBtn();
     };
@@ -1652,7 +2183,7 @@ const BIMG = {
 
   function renderHeaderBadges() {
     const wrap = document.getElementById('tables-badges');
-    wrap.classList.toggle('compact', TABLES.length > 5);
+    wrap.classList.toggle('compact', TABLES.length > 4);
     wrap.innerHTML = '';
     TABLES.forEach(t => {
       const b = document.createElement('span');
@@ -1681,6 +2212,7 @@ const BIMG = {
   }
 
   function startGame() {
+    cancelPending();
     score = 0; streak = 0; roundCorrect = 0;
     recentQuestions = []; wrongQueue = [];
     resetRoundStats();
@@ -1692,25 +2224,27 @@ const BIMG = {
     document.getElementById('stats').classList.remove('hidden');
     document.getElementById('game').classList.remove('hidden');
     document.getElementById('home-btn').classList.remove('hidden');
+    gameActive = true;
 
     // Mode-specific UI
     const hasTimer = mode === 'toets';
-    const hasBrawlers = mode !== 'vrij';
+    const hasRewards = mode !== 'vrij';
     document.body.classList.toggle('vrij-active', mode === 'vrij');
     document.getElementById('timer').classList.toggle('hidden', !hasTimer);
-    document.querySelector('.progress-card').style.display = hasBrawlers ? '' : 'none';
-    document.querySelector('.collection').style.display    = hasBrawlers ? '' : 'none';
+    document.querySelector('.progress-card').style.display = hasRewards ? '' : 'none';
+    document.querySelector('.collection').style.display    = hasRewards ? '' : 'none';
 
     renderHeaderBadges();
     renderCollection();
     renderQuestion();
     if (hasTimer) startTimer();
-    document.getElementById('answer-input').focus();
   }
 
   function goHome() {
     updatePB();
+    cancelPending();
     stopTimer();
+    gameActive = false;
     locked = true;
     document.getElementById('overlay').classList.remove('show');
     document.getElementById('timeup').classList.remove('show');
@@ -1732,9 +2266,20 @@ const BIMG = {
   }
 
   // ============ TIMER ============
+  // De rondetijd past zich aan: lukt het, dan wordt het iets sneller;
+  // is de tijd op, dan krijg je de volgende keer meer tijd.
+  function computeRoundTime() {
+    return Math.round(Math.min(60, Math.max(20, currentGoal() * pace)));
+  }
   function startTimer() {
     stopTimer();
-    timeLeft = ROUND_TIME;
+    roundTime = computeRoundTime();
+    timeLeft = roundTime;
+    resumeTimer();
+    updateProgress();
+  }
+  function resumeTimer() {
+    if (tickInterval || mode !== 'toets' || !gameActive || timeLeft <= 0) return;
     updateTimerUI();
     tickInterval = setInterval(() => {
       timeLeft--;
@@ -1751,12 +2296,29 @@ const BIMG = {
   function updateTimerUI() {
     document.getElementById('timer-num').textContent = timeLeft;
     const t = document.getElementById('timer');
-    if (timeLeft <= 10) t.classList.add('warn'); else t.classList.remove('warn');
+    t.classList.toggle('warn', timeLeft <= 10);
+  }
+  function setPace(p) {
+    pace = Math.min(12, Math.max(5, p));
+    writeStore(PACE_KEY, String(pace));
   }
 
+  // Timer pauzeren als de app naar de achtergrond gaat
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (tickInterval) { stopTimer(); pausedByHide = true; }
+    } else if (pausedByHide) {
+      pausedByHide = false;
+      if (phase !== 'fix' && !overlayOpen()) resumeTimer();
+    }
+  });
+
   function onTimeUp() {
+    cancelPending();
     locked = true;
+    setNumpadEnabled(false);
     roundCorrect = 0;
+    setPace(pace + 1);
     updateProgress();
     playTimeUp();
     document.getElementById('timeup-summary').innerHTML = buildSummaryHTML();
@@ -1765,10 +2327,8 @@ const BIMG = {
   document.getElementById('timeup-btn').onclick = () => {
     document.getElementById('timeup').classList.remove('show');
     resetRoundStats();
-    startTimer();
-    locked = false;
     renderQuestion();
-    document.getElementById('answer-input').focus();
+    startTimer();
   };
 
   // ============ QUESTION ============
@@ -1777,75 +2337,162 @@ const BIMG = {
     recentQuestions.push(qKey(q.num, q.table));
     if (recentQuestions.length > 3) recentQuestions.shift();
   }
+  function buildQuestion(table, num) {
+    // Sommen die al goed gaan, soms andersom vragen: ? × 6 = 42
+    const missing = factLevel(table, num) >= 2 && Math.random() < 0.3;
+    return { table, num, missing, answer: missing ? num : table * num };
+  }
   function makeQuestion() {
-    // 50% chance: revisit a wrong question (if any, not in recent, table still selected)
+    // 50% kans: een fout gemaakte som van deze sessie komt terug
     if (wrongQueue.length > 0 && Math.random() < 0.5) {
       for (let i = 0; i < wrongQueue.length; i++) {
         const c = wrongQueue[i];
         if (!TABLES.includes(c.table)) { wrongQueue.splice(i, 1); i--; continue; }
         if (!recentQuestions.includes(qKey(c.num, c.table))) {
           wrongQueue.splice(i, 1);
-          const q = { table: c.table, num: c.num, answer: c.table * c.num };
+          const q = { table: c.table, num: c.num, missing: false, answer: c.table * c.num };
           rememberQuestion(q);
           return q;
         }
       }
     }
-    // Random, but avoid recent
-    let q = null;
-    for (let attempts = 0; attempts < 30; attempts++) {
-      const table = TABLES[Math.floor(Math.random() * TABLES.length)];
-      const num = Math.floor(Math.random() * 10) + 1;
-      if (!recentQuestions.includes(qKey(num, table))) {
-        q = { table, num, answer: table * num };
-        break;
+    // Gewogen kiezen: moeilijke (lage niveau) sommen vaker
+    const pool = [];
+    let totalW = 0;
+    TABLES.forEach(table => {
+      for (let num = 1; num <= 10; num++) {
+        if (recentQuestions.includes(qKey(num, table))) continue;
+        const w = 4 - factLevel(table, num);
+        pool.push({ table, num, w });
+        totalW += w;
       }
+    });
+    let r = Math.random() * totalW;
+    let pick = pool[pool.length - 1];
+    for (const p of pool) {
+      r -= p.w;
+      if (r < 0) { pick = p; break; }
     }
-    if (!q) {
-      const table = TABLES[Math.floor(Math.random() * TABLES.length)];
-      const num = Math.floor(Math.random() * 10) + 1;
-      q = { table, num, answer: table * num };
-    }
+    const q = buildQuestion(pick.table, pick.num);
     rememberQuestion(q);
     return q;
   }
 
+  function questionHTML(q) {
+    // tafelgetal op TWEEDE plek
+    return q.missing
+      ? `<span class="gap">?</span> <span class="x">×</span> ${q.table} = ${q.table * q.num}`
+      : `${q.num} <span class="x">×</span> ${q.table} = ?`;
+  }
+  function fullEquation(q) { return `${q.num} × ${q.table} = ${q.table * q.num}`; }
+
   function renderQuestion() {
     current = makeQuestion();
-    // tafelgetal op TWEEDE plek
-    document.getElementById('question').innerHTML =
-      `${current.num} <span class="x">×</span> ${current.table} = ?`;
-    const input = document.getElementById('answer-input');
-    input.value = '';
-    input.disabled = false;
-    document.querySelector('.answer-row').classList.remove('correct', 'wrong');
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('feedback').className = 'feedback';
-    document.getElementById('streak-msg').textContent = '';
+    phase = 'answer';
+    document.getElementById('question').innerHTML = questionHTML(current);
+    setTyped('');
+    document.getElementById('answer-row').classList.remove('correct', 'wrong');
+    const fb = document.getElementById('feedback');
+    fb.textContent = '';
+    fb.className = 'feedback';
     locked = false;
-    setTimeout(() => input.focus(), 30);
+    setNumpadEnabled(true);
     updateProgress();
   }
+
+  // ============ INVOER (cijfertoetsenbord + toetsenbord) ============
+  function setTyped(v) {
+    typed = v;
+    const el = document.getElementById('answer-input');
+    el.textContent = v;
+    el.classList.remove('hint');
+  }
+  function showFixHint() {
+    setTyped('');
+    const el = document.getElementById('answer-input');
+    el.textContent = current.answer;      // lichtgrijs voorbeeld, verdwijnt bij typen
+    el.classList.add('hint');
+  }
+  function setNumpadEnabled(on) {
+    document.getElementById('numpad').classList.toggle('disabled', !on);
+  }
+  function overlayOpen() {
+    return document.getElementById('overlay').classList.contains('show') ||
+           document.getElementById('timeup').classList.contains('show');
+  }
+  function pressKey(k) {
+    if (!gameActive || locked || overlayOpen()) return;
+    if (k === 'go') { submitAnswer(); return; }
+    const row = document.getElementById('answer-row');
+    row.classList.remove('wrong');
+    if (k === 'back') { setTyped(typed.slice(0, -1)); playKey(); return; }
+    if (typed.length >= MAX_DIGITS) return;
+    if (typed === '0') typed = '';
+    setTyped(typed + k);
+    playKey();
+  }
+  document.getElementById('numpad').addEventListener('click', (e) => {
+    const key = e.target.closest('.key');
+    if (key) pressKey(key.dataset.k);
+  });
+  function flashKey(k) {
+    const el = document.querySelector(`.key[data-k="${k}"]`);
+    if (!el) return;
+    el.classList.add('pressed');
+    setTimeout(() => el.classList.remove('pressed'), 110);
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    // Enter sluit een open scherm (beloning / tijd op)
+    if (e.key === 'Enter' && overlayOpen()) {
+      e.preventDefault();
+      const btn = document.getElementById('overlay').classList.contains('show')
+        ? document.getElementById('unlock-btn') : document.getElementById('timeup-btn');
+      btn.click();
+      return;
+    }
+    if (!gameActive) return;
+    let k = null;
+    if (/^[0-9]$/.test(e.key)) k = e.key;
+    else if (e.key === 'Backspace') k = 'back';
+    else if (e.key === 'Enter') k = 'go';
+    if (k === null) return;
+    e.preventDefault();
+    flashKey(k);
+    pressKey(k);
+  });
 
   // ============ ANSWER ============
   const GOOD = ['Top! 🎉','Super! ⭐','Yes! 🔥','Knap! 💪','Geweldig! 💥','Perfect! 🏆','Bam! 🚀','Goed bezig! ⚡'];
 
-  document.getElementById('answer-form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    submitAnswer();
-  });
-
   function submitAnswer() {
-    if (locked) return;
-    const input = document.getElementById('answer-input');
-    const raw = input.value.trim();
-    if (raw === '') return;
-    const val = parseInt(raw, 10);
-    if (isNaN(val)) return;
+    if (locked || typed === '') return;
+    const val = parseInt(typed, 10);
+    const row = document.getElementById('answer-row');
+    const fb = document.getElementById('feedback');
+
+    // Na een fout: het goede antwoord overtypen om het te onthouden
+    if (phase === 'fix') {
+      if (val === current.answer) {
+        locked = true;
+        setNumpadEnabled(false);
+        row.classList.add('correct');
+        fb.textContent = 'Goed zo, onthouden! 👍';
+        fb.className = 'feedback good';
+        playCorrect();
+        later(() => { renderQuestion(); resumeTimer(); }, 700);
+      } else {
+        row.classList.remove('wrong');
+        void row.offsetWidth;       // animatie opnieuw starten
+        row.classList.add('wrong');
+        playWrong();
+        showFixHint();
+      }
+      return;
+    }
 
     locked = true;
-    input.disabled = true;
-    const row = document.querySelector('.answer-row');
+    setNumpadEnabled(false);
 
     if (val === current.answer) {
       row.classList.add('correct');
@@ -1854,32 +2501,33 @@ const BIMG = {
       streak++;
       roundCorrect++;
       trackAnswer(current.table, true);
+      recordFact(current.table, current.num, true);
       playCorrect();
       document.getElementById('score').textContent = score;
       document.getElementById('streak').textContent = streak;
 
-      const fb = document.getElementById('feedback');
       fb.textContent = GOOD[Math.floor(Math.random()*GOOD.length)];
       fb.className = 'feedback good';
-
       if (streak >= 3) {
-        document.getElementById('streak-msg').textContent =
-          `🔥 ${streak}x op rij! +${bonus} bonus`;
+        fb.insertAdjacentHTML('beforeend', ` <span class="streak-msg">${streak}x op rij! +${bonus}</span>`);
       }
-      spawnStars(input);
+      spawnStars(document.getElementById('answer-input'));
       updateProgress();
       updatePB();
 
       if (mode !== 'vrij' && roundCorrect >= currentGoal()) {
-        setTimeout(doUnlock, 650);
+        stopTimer();                // gehaald: tijd kan niet meer op raken
+        later(doUnlock, 650);
       } else {
-        setTimeout(renderQuestion, 650);
+        later(renderQuestion, 650);
       }
     } else {
       row.classList.add('wrong');
       streak = 0;
       trackAnswer(current.table, false);
+      recordFact(current.table, current.num, false);
       playWrong();
+      stopTimer();                  // even pauze om de som te leren
       // add to revisit queue (avoid duplicates)
       const key = qKey(current.num, current.table);
       if (!wrongQueue.some(c => qKey(c.num, c.table) === key)) {
@@ -1887,10 +2535,21 @@ const BIMG = {
         if (wrongQueue.length > 8) wrongQueue.shift();
       }
       document.getElementById('streak').textContent = 0;
-      const fb = document.getElementById('feedback');
-      fb.textContent = `Het was ${current.answer} — door! 💪`;
+      fb.innerHTML = `Bijna! <span class="ans">${fullEquation(current)}</span>`;
       fb.className = 'feedback bad';
-      setTimeout(renderQuestion, 1200);
+      later(() => {
+        phase = 'fix';
+        row.classList.remove('wrong');
+        showFixHint();
+        document.getElementById('question').innerHTML =
+          current.missing
+            ? `<span class="gap">${current.num}</span> <span class="x">×</span> ${current.table} = ${current.table * current.num}`
+            : `${current.num} <span class="x">×</span> ${current.table} = ${current.answer}`;
+        fb.innerHTML = `Typ <span class="ans">${current.answer}</span> over`;
+        fb.className = 'feedback fix';
+        locked = false;
+        setNumpadEnabled(true);
+      }, 1100);
     }
   }
 
@@ -1901,28 +2560,44 @@ const BIMG = {
     document.getElementById('progress-fill').style.width = (done / goal * 100) + '%';
     document.getElementById('progress-frac').textContent = `${done}/${goal}`;
 
-    const nextBrawler = queue[unlocked % queue.length];
+    const next = unlocked < queue.length ? queue[unlocked] : null;
     const preview = document.getElementById('next-preview');
-    preview.innerHTML = `<img src="${IMG(nextBrawler.id)}" alt="?" style="width:46px;height:46px;object-fit:contain;filter:brightness(0) drop-shadow(0 0 7px ${nextBrawler.color});opacity:0.88" onerror="this.outerHTML='<span style=\\'font-size:1.7em\\'>❓</span>'">`;
-    preview.style.borderColor = nextBrawler.color + '88';
+    if (next) {
+      preview.innerHTML = `<img class="creature-img" src="${imgSrc(next)}" alt="?" style="width:46px;height:46px;object-fit:contain;filter:grayscale(1) brightness(0.35) blur(2.5px);opacity:0.9" onerror="this.outerHTML='<span style=\\'font-size:1.7em\\'>❓</span>'">`;
+      preview.style.borderColor = next.color + '88';
+      preview.insertAdjacentHTML('beforeend', '<span class="next-q">?</span>');
+    } else {
+      preview.innerHTML = '<span style="font-size:1.7em">⭐</span>';
+      preview.style.borderColor = '';
+    }
 
     const left = goal - roundCorrect;
     const txt = document.getElementById('progress-text');
-    const word = THEMES[activeTheme].rewardWord;
-    const wordCap = THEMES[activeTheme].rewardWordCap;
+    const t = THEMES[activeTheme];
     if (left <= 0) {
-      txt.innerHTML = `🎉 ${wordCap} verdiend!`;
+      txt.innerHTML = `🎉 ${t.rewardWordCap} verdiend!`;
     } else if (mode === 'toets') {
-      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed binnen 30s!`;
+      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed binnen <span class="num">${roundTime}s</span>!`;
     } else {
-      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed voor een ${word}!`;
+      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed voor een ${t.rewardWord}!`;
     }
   }
 
   // ============ UNLOCK ============
   function doUnlock() {
+    if (!gameActive) return;
     stopTimer();
-    const b = queue[unlocked % queue.length];
+    setNumpadEnabled(false);
+    const t = THEMES[activeTheme];
+    let b, bonus = false;
+    if (unlocked < queue.length) {
+      b = queue[unlocked];
+      unlocked++;
+    } else {
+      b = queue[Math.floor(Math.random() * queue.length)];   // alles al verzameld
+      bonus = true;
+    }
+    document.querySelector('.unlock-banner').textContent = bonus ? 'ALLES VERZAMELD! ⭐' : t.unlockBanner;
     document.getElementById('unlock-emoji').innerHTML = brawlerImgHTML(b, '160px');
     document.getElementById('unlock-name').textContent = b.name;
     document.getElementById('unlock-name').style.color = b.color;
@@ -1932,48 +2607,55 @@ const BIMG = {
     document.getElementById('overlay').classList.add('show');
     playUnlock();
     spawnConfetti();
-    unlocked++;
     roundCorrect = 0;
+    if (mode === 'toets') setPace(pace - 0.5);
+    saveCollection();
     updatePB();
-    renderCollection();
+    renderCollection(!bonus);
   }
   document.getElementById('unlock-btn').onclick = () => {
     document.getElementById('overlay').classList.remove('show');
     resetRoundStats();
-    if (mode === 'toets') startTimer();
     renderQuestion();
+    if (mode === 'toets') startTimer();
   };
 
   // ============ COLLECTION ============
   function updateCollectionTitle() {
     const t = THEMES[activeTheme];
-    const totalCreatures = t.creatures.length;
     const el = document.getElementById('collection-title');
     if (el) el.innerHTML =
-      `★ ${t.collectionTitle} <span class="col-count">(${unlocked}/${totalCreatures})</span> ★`;
+      `★ ${t.collectionTitle} <span class="col-count">(${unlocked}/${queue.length})</span> ★`;
   }
 
-  function renderCollection() {
+  function renderCollection(animateNewest = false) {
     updateCollectionTitle();
     const grid = document.getElementById('collection');
     grid.innerHTML = '';
-    const total = Math.min(THEMES[activeTheme].creatures.length, Math.max(8, unlocked + 4));
+    const total = Math.min(queue.length, Math.max(8, unlocked + 4));
+    let newest = null;
     for (let i = 0; i < total; i++) {
       const b = queue[i];
       const isOpen = i < unlocked;
       const slot = document.createElement('div');
       slot.className = 'brawler-slot ' + (isOpen ? 'unlocked' : 'locked');
+      if (isOpen && animateNewest && i === unlocked - 1) { slot.classList.add('just'); newest = slot; }
       if (isOpen) {
         slot.style.background = `linear-gradient(180deg, ${b.bg}, ${b.bg}cc)`;
         slot.style.borderColor = b.color;
       }
       const visual = isOpen
-        ? brawlerImgHTML(b, '52px')
+        ? brawlerImgHTML(b, '44px')
         : `<span style="font-size:1.9em;line-height:1">🔒</span>`;
       slot.innerHTML = `<div class="emo">${visual}</div>
                        <div class="nm">${isOpen ? b.name : '???'}</div>`;
       slot.title = isOpen ? `${b.name} — ${b.rarity}` : 'Nog te verdienen';
       grid.appendChild(slot);
+    }
+    // nieuwste personage in beeld schuiven
+    const target = newest || grid.children[Math.max(0, unlocked - 1)];
+    if (target && unlocked > 0) {
+      grid.scrollLeft = Math.max(0, target.offsetLeft - grid.offsetLeft - grid.clientWidth / 2 + target.offsetWidth / 2);
     }
   }
 
@@ -1982,7 +2664,7 @@ const BIMG = {
     const rect = el.getBoundingClientRect();
     const cx = rect.left + rect.width/2;
     const cy = rect.top + rect.height/2;
-    const icons = ['⭐','✨','💫','🌟','💥'];
+    const icons = THEMES[activeTheme].particles;
     for (let i = 0; i < 9; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -1997,13 +2679,14 @@ const BIMG = {
   }
 
   function spawnConfetti() {
-    const colors = ['#ffcc00','#ff7a1a','#2ad96e','#8a3aff','#3ad6ff','#ff3b5c'];
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = THEMES[activeTheme].confetti;
     for (let i = 0; i < 100; i++) {
       const c = document.createElement('div');
       c.className = 'confetti';
       const size = Math.random()*10 + 6;
       c.style.width = size + 'px';
-      c.style.height = (size * 0.5) + 'px';
+      c.style.height = (activeTheme === 'mc' ? size : size * 0.5) + 'px';   // blokjes bij Minecraft
       c.style.background = colors[Math.floor(Math.random()*colors.length)];
       c.style.left = Math.random()*100 + 'vw';
       c.style.top  = '-30px';
@@ -2027,6 +2710,14 @@ const BIMG = {
   renderTablePicker();
   renderPB();
   updateStartBtn();
+
+  // Offline + "zet op beginscherm" (alleen via https of localhost)
+  if ('serviceWorker' in navigator &&
+      (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
 </script>
 
 </body>
