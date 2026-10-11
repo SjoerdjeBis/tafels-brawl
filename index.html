@@ -81,99 +81,47 @@
     z-index: 0;
   }
 
-  /* ============ HEADER ============ */
+  /* ============ SPELBALK: één slanke balk bovenin tijdens het spel ============ */
   .header {
     position: relative; z-index: 2;
     width: 100%;
-    padding: 10px 90px;
-    min-height: 86px;
-    text-align: center;
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 10px;
     background: linear-gradient(180deg, var(--orange) 0%, var(--gold-2) 100%);
-    border-bottom: 4px solid var(--orange-deep);
-    box-shadow: 0 4px 0 rgba(0,0,0,0.45);
+    border-bottom: 3px solid var(--orange-deep);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.35);
     flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; gap: 20px;
-    flex-wrap: wrap;
   }
-  .header h1 {
-    font-family: 'Baloo 2', sans-serif;
-    font-weight: 800;
-    font-size: clamp(1.2em, 5.6vw, 2.7em);
-    white-space: nowrap;
-    color: #fff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.45);
-    letter-spacing: 1px;
-    line-height: 1;
-  }
-  .header .sub { display: none; }
+  /* gekozen tafels als gewone tekst */
   .tables-badges {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    row-gap: 5px;
-    width: 100%;
-    margin-top: 2px;
+    flex: 1; min-width: 0;
+    font-size: 0.92em; letter-spacing: 0.5px; color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.35);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .tbl-label {
-    color: var(--ink);
-    font-size: 1em;
-    letter-spacing: 2px;
-    margin-right: 4px;
+  .tables-badges b { font-weight: normal; opacity: 0.85; margin-right: 3px; }
+  .gb-stat {
+    display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0;
+    background: rgba(0,0,0,0.28); border-radius: 999px;
+    padding: 3px 9px; font-size: 0.9em; color: #fff; white-space: nowrap;
   }
-  .tbl-badge {
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    min-width: 38px; height: 38px;
-    padding: 0 8px;
-    color: var(--ink);
-    border: 3px solid var(--ink);
-    border-radius: 50%;
-    font-size: 1.25em;
-    -webkit-text-stroke: 1px var(--ink);
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
-    box-shadow: 0 3px 0 var(--ink), inset 0 -2px 0 rgba(0,0,0,0.15);
-    flex-shrink: 0;
-  }
-  .tbl-pill {
-    background: rgba(0,0,0,0.3); color: #fff; border-radius: 999px;
-    padding: 4px 14px; font-size: 1em; letter-spacing: 1px; white-space: nowrap;
-    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
-  }
-  /* >5 tables: shrink badges so they all fit on one line */
-  .tables-badges.compact { gap: 4px; }
-  .tables-badges.compact .tbl-label { font-size: 0.85em; letter-spacing: 1px; margin-right: 2px; }
-  .tables-badges.compact .tbl-badge {
-    min-width: 26px; height: 26px;
-    padding: 0 4px;
-    font-size: 0.95em;
-    border-width: 2px;
-    box-shadow: 0 2px 0 var(--ink), inset 0 -1px 0 rgba(0,0,0,0.15);
-  }
+  .header .stat-value { color: #fff; font-size: 1.1em; text-shadow: 1px 1px 0 rgba(0,0,0,0.4); }
+  .header .mute-btn { width: 34px; height: 34px; font-size: 0.95em; }
 
   /* ============ HOME BUTTON ============ */
   .home-btn {
-    position: fixed;
-    top: calc(10px + env(safe-area-inset-top));
-    left: calc(14px + env(safe-area-inset-left));
-    z-index: 50;
-    width: 62px; height: 62px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #fff5cf, var(--gold-2) 65%, var(--gold-deep) 100%);
-    border: 4px solid var(--ink);
-    box-shadow: 0 5px 0 var(--ink), 0 8px 18px rgba(0,0,0,0.5);
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 11px;
+    background: rgba(0,0,0,0.28);
+    border: 2px solid rgba(255,255,255,0.4);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.7em;
-    cursor: pointer;
-    font-family: inherit;
-    color: var(--ink);
-    transition: transform .08s ease;
-    line-height: 1;
+    font-size: 1.1em; line-height: 1;
+    cursor: pointer; font-family: inherit; color: #fff;
+    transition: transform .12s var(--ease-out);
   }
-  .home-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 var(--ink); }
+  .home-btn:active { transform: scale(0.92); }
   .home-btn.hidden { display: none; }
-  .home-btn.armed { box-shadow: 0 0 0 4px #ff3b5c, 0 5px 0 var(--ink); animation: armWiggle .4s var(--ease-out); }
+  .home-btn.armed { background: #ff3b5c; border-color: #fff; animation: armWiggle .4s var(--ease-out); }
   @keyframes armWiggle { 25% { transform: rotate(-10deg); } 75% { transform: rotate(8deg); } }
 
   /* ============ START: 3 STAPPEN (wereld → spel → tafels) ============ */
@@ -409,12 +357,12 @@
     display: flex; gap: 10px; align-items: center;
     background: linear-gradient(180deg, #3a0d1e, #1a0610);
     border: 3px solid #ff3b5c; border-radius: 14px;
-    padding: 6px 10px;
+    padding: 5px 10px;
     box-shadow: 0 4px 0 #6a0a20, 0 0 22px rgba(255,59,92,0.35);
     flex-shrink: 0;
   }
   .boss-card.hidden { display: none; }
-  .boss-img { width: 64px; height: 64px; flex-shrink: 0; }
+  .boss-img { width: 52px; height: 52px; flex-shrink: 0; }
   .boss-img img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(255,59,92,0.85)); }
   .boss-img.hit { animation: bossHit .38s ease; }
   @keyframes bossHit {
@@ -570,6 +518,13 @@
   }
   .p-btn.ghost { background: transparent; }
   .p-code { font-family: ui-monospace, Menlo, monospace; font-size: 0.95em; background: rgba(0,0,0,0.35); padding: 2px 6px; border-radius: 6px; user-select: all; -webkit-user-select: all; word-break: break-all; }
+  .update-btn.hidden { display: none; }
+  .update-btn {
+    position: fixed; left: 50%; bottom: calc(90px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    z-index: 250; font: inherit; font-size: 0.95em; padding: 10px 18px; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(180deg, #3a9dff, #1f5fc0); color: #fff; border: 3px solid #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.4); white-space: nowrap;
+  }
   .toast {
     position: fixed; left: 50%; top: calc(56px + env(safe-area-inset-top));
     transform: translateX(-50%); z-index: 300;
@@ -726,81 +681,27 @@
     opacity: 0.7;
   }
 
-  .game.hidden, .header.hidden, .stats.hidden, .timer.hidden { display: none; }
+  .game.hidden, .header.hidden, .timer.hidden { display: none; }
 
-  /* ============ TIMER (corner) ============ */
+  /* ============ TIMER: pilletje in de voortgangskaart ============ */
   .timer {
-    position: fixed;
-    top: calc(8px + env(safe-area-inset-top));
-    right: calc(12px + env(safe-area-inset-right));
-    z-index: 50;
-    width: 82px; height: 82px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #fff5b0, var(--gold-2) 65%, var(--gold-deep) 100%);
-    border: 5px solid var(--ink);
-    box-shadow:
-      0 0 0 4px var(--gold-2),
-      0 7px 0 var(--ink),
-      0 10px 24px rgba(0,0,0,0.5);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    transition: transform .1s ease;
+    display: inline-flex; align-items: baseline; gap: 1px; flex-shrink: 0;
+    padding: 2px 9px; border-radius: 999px;
+    background: #fff3c4; border: 2px solid var(--ink);
+    box-shadow: 0 2px 0 var(--ink);
   }
-  .timer-label {
-    font-size: 0.9em;
-    color: var(--ink);
-    letter-spacing: 2px;
-    line-height: 1;
-    margin-top: -2px;
-  }
-  .timer-num {
-    font-size: 2.1em;
-    color: var(--ink);
-    line-height: 1;
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
-  }
-  .timer.warn {
-    background: radial-gradient(circle at 30% 30%, #ffb0b0, var(--red) 65%, var(--red-deep) 100%);
-    box-shadow:
-      0 0 0 4px var(--red),
-      0 7px 0 var(--ink),
-      0 0 30px rgba(255,59,92,0.8);
-    animation: timerPulse 0.5s ease-in-out infinite alternate;
-  }
-  .timer.warn .timer-num, .timer.warn .timer-label { color: #fff; text-shadow: 2px 2px 0 var(--red-deep); }
-  @keyframes timerPulse {
-    from { transform: scale(1); }
-    to   { transform: scale(1.08); }
-  }
-
-  /* ============ STATS BAR ============ */
-  .stats {
-    position: relative; z-index: 2;
-    display: flex; gap: 7px; padding: 6px 8px;
-    width: 100%; justify-content: center; flex-wrap: nowrap;
-    background: rgba(0,0,0,0.35);
-    border-bottom: 2px solid rgba(255,255,255,0.07);
-    flex-shrink: 0;
-  }
-  .stat {
-    display:flex; align-items:center; gap:5px;
-    background: rgba(0,0,0,0.4);
-    padding: 5px 11px;
-    border-radius: 22px;
-    border: 2px solid rgba(255,255,255,0.1);
-    font-size: 0.92em;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-  .stat .ico { font-size: 1.2em; }
-  .stat-value { color: var(--gold); font-size: 1.3em; text-shadow: 2px 2px 0 rgba(0,0,0,0.5); }
+  .timer-num { font-size: 1.15em; line-height: 1.1; color: var(--ink); }
+  .timer-label { font-size: 0.75em; color: var(--ink); }
+  .timer.warn { background: var(--red); border-color: var(--red-deep); animation: timerPulse 0.5s ease-in-out infinite alternate; }
+  .timer.warn .timer-num, .timer.warn .timer-label { color: #fff; }
+  @keyframes timerPulse { from { transform: scale(1); } to { transform: scale(1.1); } }
 
   /* ============ GAME AREA ============ */
   .game {
     position: relative; z-index: 2;
     max-width: 720px; width: 100%;
-    margin: 0 auto; padding: 12px 16px;
-    display: flex; flex-direction: column; gap: 10px;
+    margin: 0 auto; padding: 8px 12px 10px;
+    display: flex; flex-direction: column; gap: 8px;
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
@@ -811,13 +712,13 @@
     background: linear-gradient(180deg, #2a225a, #1a1340);
     border: 3px solid var(--purple);
     border-radius: 14px;
-    padding: 8px 12px;
-    display: flex; align-items: center; gap: 12px;
+    padding: 6px 10px;
+    display: flex; align-items: center; gap: 10px;
     box-shadow: 0 4px 0 #4a1d8a, 0 0 25px rgba(138,58,255,0.25);
     flex-shrink: 0;
   }
   .next-preview {
-    width: 56px; height: 56px;
+    width: 44px; height: 44px;
     border-radius: 13px;
     background: rgba(0,0,0,0.5);
     border: 2px dashed rgba(255,255,255,0.3);
@@ -833,22 +734,23 @@
     font-size: 1.1em; color: #fff;
     text-shadow: 0 2px 0 var(--ink), 0 0 8px rgba(0,0,0,0.8);
   }
-  .progress-info { flex: 1; }
+  .progress-info { flex: 1; min-width: 0; }
   .progress-label {
     display: flex; justify-content: space-between;
-    align-items: center;
-    font-size: 1.1em; margin-bottom: 6px;
-    letter-spacing: 1px;
+    align-items: center; gap: 6px;
+    font-size: 1em; margin-bottom: 5px;
+    letter-spacing: 0.5px;
   }
+  .progress-label #progress-text { flex: 1; min-width: 0; line-height: 1.15; }
   .progress-frac {
     color: var(--gold);
     background: rgba(0,0,0,0.4);
-    padding: 3px 12px; border-radius: 12px;
-    font-size: 1.14em;
+    padding: 2px 10px; border-radius: 12px;
+    font-size: 1.05em; flex-shrink: 0;
     text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
   }
   .progress-bar-bg {
-    width: 100%; height: 18px;
+    width: 100%; height: 13px;
     background: #07091a; border-radius: 10px;
     overflow: hidden;
     border: 2px solid rgba(0,0,0,0.5);
@@ -1027,13 +929,13 @@
     background: linear-gradient(180deg, #1c2454, #10153a);
     border: 3px solid var(--blue);
     border-radius: 14px;
-    padding: 8px 10px 10px;
+    padding: 5px 8px 6px;
     box-shadow: 0 4px 0 var(--blue-deep);
     flex-shrink: 0;
   }
   .collection-title {
     text-align: center; color: var(--gold);
-    margin-bottom: 8px; font-size: 1.1em; letter-spacing: 2px;
+    margin-bottom: 4px; font-size: 0.95em; letter-spacing: 1.5px;
     text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
   }
   .col-count {
@@ -1055,7 +957,7 @@
   .collection-grid::-webkit-scrollbar { height: 6px; }
   .collection-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
   .collection-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
-  .collection-grid .tile { flex: 0 0 58px; width: 58px; font-size: 15px; }
+  .collection-grid .tile { flex: 0 0 52px; width: 52px; font-size: 14px; }
   @keyframes unlockIn {
     0%   { transform: scale(0.6); opacity: 0; }
     60%  { transform: scale(1.08); opacity: 1; }
@@ -1293,9 +1195,6 @@
     text-shadow: 0 2px 10px rgba(136,255,68,0.55);
   }
   body.theme-monster .tbl-label { color: #b8ff66; }
-  body.theme-monster .tbl-badge {
-    box-shadow: 0 3px 0 var(--ink), inset 0 -2px 0 rgba(0,0,0,0.3), 0 0 8px rgba(136,255,68,0.3);
-  }
   /* Question card greenish glow */
   body.theme-monster .question-card {
     border-color: #88ff44;
@@ -1439,7 +1338,6 @@
     border-bottom-color: #4a2f15;
   }
   body.theme-mc .tbl-label { color: #fff; }
-  body.theme-mc .tbl-badge { border-radius: 6px; }
   body.theme-mc .question-card,
   body.theme-mc .table-picker,
   body.theme-mc .progress-card,
@@ -1536,7 +1434,7 @@
   /* Cijfers: in Pixelify lijkt een 5 op een S — daarom een pixel-font met duidelijke cijfers */
   body.theme-mc .question, body.theme-mc .answer-input, body.theme-mc .key,
   body.theme-mc .table-card, body.theme-mc .timer-num, body.theme-mc .stat-value,
-  body.theme-mc .pb-val, body.theme-mc .progress-frac, body.theme-mc .tbl-badge,
+  body.theme-mc .pb-val, body.theme-mc .progress-frac,
   body.theme-mc .col-count, body.theme-mc .rs-val, body.theme-mc .feedback .ans,
   body.theme-mc #progress-text strong, body.theme-mc .streak-msg, body.theme-mc #progress-text .num,
   body.theme-mc .m-reward, body.theme-mc .wt-count, body.theme-mc .album-count, body.theme-mc .album-tier span:last-child,
@@ -1553,8 +1451,7 @@
   body.theme-mc .tc-stars { font-family: 'Lilita One', sans-serif; font-size: 0.6em; }
   body.theme-mc .timer-num { font-size: 1.2em; margin-top: 3px; }
   body.theme-mc .stat-value, body.theme-mc .pb-val { font-size: 0.9em; }
-  body.theme-mc .tbl-badge { font-size: 0.75em; }
-  body.theme-mc .tables-badges.compact .tbl-badge { font-size: 0.6em; }
+  body.theme-mc .tables-badges { font-family: 'Press Start 2P', monospace; font-size: 0.6em; letter-spacing: 0; }
   body.theme-mc .progress-frac, body.theme-mc .rs-val { font-size: 0.8em; }
   body.theme-mc .m-reward, body.theme-mc .wt-count, body.theme-mc .album-tier span:last-child, body.theme-mc .boss-hp span { font-size: 0.55em; }
   body.theme-mc .album-count, body.theme-mc .pb-chip b, body.theme-mc .step-dot, body.theme-mc .boss-lv { font-size: 0.7em; }
@@ -1639,17 +1536,9 @@
 
   /* ============ LAGE SCHERMEN (kleine telefoons, adresbalk zichtbaar) ============ */
   @media (max-height: 720px) {
-    .game { padding: 8px 12px; gap: 8px; }
-    .progress-card { padding: 6px 10px; }
-    .next-preview { width: 44px; height: 44px; }
-    .next-preview img { width: 36px !important; height: 36px !important; }
-    .collection { padding: 5px 8px 6px; }
-    .collection-title { margin-bottom: 4px; font-size: 0.95em; }
-    .collection-grid .tile { flex-basis: 50px; width: 50px; font-size: 13px; }
-    .header { padding-top: 6px; padding-bottom: 6px; gap: 6px; }
-    .header h1 { font-size: 1.6em; }
-    .stats { padding: 4px 8px; }
-    .stat { padding: 3px 10px; }
+    .game { gap: 6px; }
+    .collection-grid .tile { flex-basis: 46px; width: 46px; font-size: 12px; }
+    .collection-title { font-size: 0.85em; }
   }
   @media (max-height: 700px) {
     .start-screen { gap: 6px; padding-top: 6px; padding-bottom: 8px; }
@@ -1687,20 +1576,11 @@
   }
 
   /* small spacing for very narrow */
-  @media (max-width: 480px) {
-    .timer { width: 68px; height: 68px; top: calc(10px + env(safe-area-inset-top)); right: calc(10px + env(safe-area-inset-right)); }
-    .timer-num { font-size: 1.6em; }
-  }
 </style>
 </head>
 <body>
 
-<button class="home-btn hidden" id="home-btn" title="Terug naar startscherm" aria-label="Terug naar startscherm">🏠</button>
 
-<div class="timer hidden" id="timer">
-  <div class="timer-label">TIJD</div>
-  <div class="timer-num" id="timer-num">30</div>
-</div>
 
 <!-- START SCREEN: 1 wereld + album → 2 spelvorm → 3 tafels -->
 <div class="start-screen" id="start-screen">
@@ -1749,14 +1629,12 @@
   </section>
 </div>
 
+<!-- SPELBALK -->
 <div class="header hidden" id="header">
-  <h1>⚡ TAFELS BRAWL ⚡</h1>
+  <button class="home-btn" id="home-btn" type="button" title="Terug naar startscherm" aria-label="Terug naar startscherm">🏠</button>
   <div class="tables-badges" id="tables-badges"></div>
-</div>
-
-<div class="stats hidden" id="stats">
-  <div class="stat"><span class="ico">⭐</span><span>PUNTEN</span><span class="stat-value" id="score">0</span></div>
-  <div class="stat"><span class="ico">🔥</span><span>STREAK</span><span class="stat-value" id="streak">0</span></div>
+  <span class="gb-stat" title="Punten">⭐ <span class="stat-value" id="score">0</span></span>
+  <span class="gb-stat" title="Goed op rij">🔥 <span class="stat-value" id="streak">0</span></span>
   <button class="mute-btn" type="button" aria-label="Geluid aan/uit">🔊</button>
 </div>
 
@@ -1765,7 +1643,8 @@
     <div class="next-preview" id="next-preview">❓</div>
     <div class="progress-info">
       <div class="progress-label">
-        <span id="progress-text">Nog 3 goed binnen 30s!</span>
+        <span id="progress-text"></span>
+        <div class="timer hidden" id="timer" aria-label="Tijd"><span class="timer-num" id="timer-num">30</span><span class="timer-label">s</span></div>
         <span class="progress-frac" id="progress-frac">0/3</span>
       </div>
       <div class="progress-bar-bg">
@@ -2812,7 +2691,6 @@ const BIMG = {
       document.getElementById('streak').textContent = 0;
     }
     document.getElementById('hero-title').textContent = t.title;
-    document.querySelector('.header h1').textContent = t.titleGame;
     document.querySelector('.unlock-banner').textContent = t.unlockBanner;
 
     renderWorldTabs();
@@ -3303,34 +3181,16 @@ const BIMG = {
     setTimeout(() => btn.classList.remove('armed'), 2500);
   };
 
+  // Gekozen tafels als gewone tekst in de spelbalk
   function renderHeaderBadges() {
     const wrap = document.getElementById('tables-badges');
-    wrap.classList.toggle('compact', TABLES.length > 4);
-    wrap.innerHTML = '';
-    // Veel tafels: één label, anders wordt de kop te hoog en de toetsen te klein
-    if (TABLES.length > 7) {
-      const contiguous = TABLES.every((t, i) => i === 0 || ALL_TABLES.indexOf(t) === ALL_TABLES.indexOf(TABLES[i - 1]) + 1);
-      wrap.innerHTML = `<span class="tbl-pill">✖️ ${TABLES.length} tafels${contiguous ? ` · ${TABLES[0]} t/m ${TABLES[TABLES.length - 1]}` : ''}</span>`;
-      return;
-    }
-    const colors = {
-      2:  ['#ff8a9e', '#ff3b5c'], 3:  ['#ffb066', '#ff7a1a'], 4:  ['#ffe566', '#ffcc00'],
-      5:  ['#b8f8d0', '#2ad96e'], 6:  ['#66e0ff', '#3ad6ff'], 7:  ['#5b9dff', '#2b6cff'],
-      8:  ['#b87aff', '#8a3aff'], 9:  ['#ff8aff', '#d22aff'], 10: ['#ff6b6b', '#aa0e2a'],
-      11: ['#7affd0', '#12b88f'], 12: ['#d4f07a', '#6a9a1a'], 15: ['#b8a8ff', '#5a3fd0'],
-      20: ['#ff9ec7', '#d6336c'],
-    };
-    TABLES.forEach((t, i) => {
-      const b = document.createElement('span');
-      const c = colors[t] || ['#fff', '#d8d8d8'];
-      b.className = 'tbl-badge';
-      b.textContent = t;
-      b.style.background = `linear-gradient(180deg, ${c[0]}, ${c[1]})`;
-      b.style.color = '#fff';
-      b.style.transform = i % 2 === 0 ? 'rotate(-3deg)' : 'rotate(3deg)';
-      wrap.appendChild(b);
-    });
+    const contiguous = TABLES.length > 2 && TABLES.every((t, i) => i === 0 || ALL_TABLES.indexOf(t) === ALL_TABLES.indexOf(TABLES[i - 1]) + 1);
+    wrap.innerHTML = TABLES.length > 6
+      ? `<b>Tafels</b> ${contiguous ? `${TABLES[0]} t/m ${TABLES[TABLES.length - 1]}` : `${TABLES.length} gekozen`}`
+      : `<b>${TABLES.length === 1 ? 'Tafel' : 'Tafels'}</b> ${TABLES.join(' · ')}`;
+    wrap.title = 'Tafels: ' + TABLES.join(', ');
   }
+
 
   // ============ SPEL STARTEN / STOPPEN ============
   function startGame() {
@@ -3343,10 +3203,11 @@ const BIMG = {
 
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('header').classList.remove('hidden');
-    document.getElementById('stats').classList.remove('hidden');
     document.getElementById('game').classList.remove('hidden');
     document.getElementById('home-btn').classList.remove('hidden');
     gameActive = true;
+    const upd = document.getElementById('update-btn');
+    if (upd) upd.classList.add('hidden');            // niet tijdens het spelen
 
     const hasTimer = mode === 'toets';
     const isBoss = mode === 'boss';
@@ -3374,12 +3235,13 @@ const BIMG = {
 
     document.getElementById('start-screen').classList.remove('hidden');
     document.getElementById('header').classList.add('hidden');
-    document.getElementById('stats').classList.add('hidden');
     document.getElementById('game').classList.add('hidden');
     document.getElementById('timer').classList.add('hidden');
     document.getElementById('home-btn').classList.add('hidden');
     showStep(1);
     scheduleSync(1000);
+    const upd = document.getElementById('update-btn');
+    if (upd) upd.classList.remove('hidden');
   }
 
   // Toets: eerst 3, daarna 5 goed. Missie: eerste 5 personages 5 goed, daarna 7.
@@ -3829,7 +3691,7 @@ const BIMG = {
     if (left <= 0) {
       txt.innerHTML = `🎉 ${t.rewardWordCap} verdiend!`;
     } else if (mode === 'toets') {
-      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed binnen <span class="num">${roundTime}s</span>!`;
+      txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed!`;
     } else {
       txt.innerHTML = `Nog <strong style="color:#ffd028">${left}</strong> goed voor een ${t.rewardWord}!`;
     }
@@ -4435,6 +4297,22 @@ const BIMG = {
       (location.protocol === 'https:' || location.hostname === 'localhost')) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+    // Nieuwe versie klaar: knop tonen (alleen op het startscherm, nooit midden in een spel)
+    navigator.serviceWorker.addEventListener('message', (e) => {
+      if (!e.data || e.data.type !== 'update-ready') return;
+      const show = () => {
+        if (gameActive) { setTimeout(show, 3000); return; }
+        let b = document.getElementById('update-btn');
+        if (!b) {
+          b = document.createElement('button');
+          b.id = 'update-btn'; b.type = 'button'; b.className = 'update-btn';
+          b.textContent = '✨ Nieuwe versie — tik om bij te werken';
+          b.onclick = () => location.reload();
+          document.body.appendChild(b);
+        }
+      };
+      show();
     });
   }
 </script>
