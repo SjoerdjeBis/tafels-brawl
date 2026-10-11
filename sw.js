@@ -1,7 +1,7 @@
 // Service worker: laat de site offline werken en als app op het beginscherm staan.
 // Pagina: eerst netwerk (zodat updates meteen binnenkomen), anders uit de cache.
 // Lettertypes en iconen: uit de cache, op de achtergrond ververst.
-const CACHE = 'tafels-v1';
+const CACHE = 'tafels-v3';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
