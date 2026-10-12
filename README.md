@@ -48,7 +48,7 @@ Open https://sjoerdjebis.github.io/tafels-brawl/ op de telefoon en kies *Zet op 
 
 - Single file HTML/CSS/JS, ~1.7MB
 - Vanilla JS (geen frameworks)
-- Firebase (project `tafels-brawl`): anonieme inlog + Firestore; de SDK wordt alleen geladen als er een gezinscode is. Beveiliging via Firestore-regels: alleen met de geheime gezinscode (≥ 20 tekens) kun je lezen/schrijven
+- Firebase (project `tafels-brawl`): anonieme inlog + Firestore; de SDK wordt alleen geladen als er een gezinscode is. Beveiliging via Firestore-regels (`firestore.rules`, handmatig te publiceren in de Firebase-console): alleen met de geheime gezinscode (≥ 20 tekens) kun je één profiel lezen/schrijven; lijsten opvragen kan niet
 - Google Fonts: Lilita One, Baloo 2, Pixelify Sans, Press Start 2P
 - 25 originele monster-illustraties gegenereerd met Python + PIL
 - Minecraft-mobs, dino's en voetballers: pixel-art, in de browser getekend op een canvas

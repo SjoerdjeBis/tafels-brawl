@@ -1,0 +1,30 @@
+rules_version = '2';
+
+// Firestore-regels voor tafels-brawl. Niet automatisch actief: plak dit in de
+// Firebase-console → Firestore Database → Regels → Publiceren.
+//
+// Opzet: de geheime gezinscode zit in het pad (families/<code>/profiles/<kind>).
+// Wie de code kent, mag dat ene document lezen en schrijven. Opvragen van lijsten
+// (welke gezinnen of profielen er zijn) mag niemand, anders lekt de code alsnog.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /families/{code}/profiles/{pid} {
+      allow get: if geldig(code, pid);
+      allow create, update: if geldig(code, pid)
+        && request.resource.data.keys().hasOnly(['data', 'avatar', 'updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    function geldig(code, pid) {
+      return request.auth != null
+        && code.size() >= 20
+        && pid in ['ben', 'jonas'];
+    }
+
+    // Al het andere (lijsten, deleten, andere collecties) is dicht.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
