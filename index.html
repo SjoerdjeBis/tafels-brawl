@@ -4080,9 +4080,20 @@ const BIMG = {
       if (!A || !B || typeof A !== 'object' || typeof B !== 'object') return;
       const r = { ...A };
       if (k === COL_KEY) {
-        Object.keys(B).forEach(th => { if (!r[th] || (B[th].unlocked | 0) > (r[th].unlocked | 0)) r[th] = B[th]; });
+        // Elk apparaat schudt de volgorde anders: neem alle verdiende personages van beide
+        // samen, in de volgorde van de cloud, zodat alle apparaten op hetzelfde album uitkomen.
+        Object.keys(B).forEach(th => {
+          const x = r[th], y = B[th];
+          if (!x || !Array.isArray(x.order)) { r[th] = y; return; }
+          if (!y || !Array.isArray(y.order)) return;
+          const xo = x.order.map(String), yo = y.order.map(String);
+          const owned = [...new Set([...yo.slice(0, y.unlocked | 0), ...xo.slice(0, x.unlocked | 0)])];
+          const order = [...new Set([...owned, ...yo, ...xo])];
+          r[th] = { order, unlocked: owned.length };
+        });
       } else if (k === FACT_KEY) {
-        Object.keys(B).forEach(f => { const x = r[f], y = B[f]; if (!x || (y.c + y.w) > (x.c + x.w)) r[f] = y; });
+        // bij gelijkspel wint de cloud, anders blijven twee apparaten elkaar overschrijven
+        Object.keys(B).forEach(f => { const x = r[f], y = B[f]; if (!x || (y.c + y.w) >= (x.c + x.w)) r[f] = y; });
       } else if (k === PB_KEY || k === BOSS_KEY) {
         Object.keys(B).forEach(f => { r[f] = Math.max(r[f] | 0, B[f] | 0); });
       } else return;
