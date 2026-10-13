@@ -4130,7 +4130,7 @@ const BIMG = {
     if (syncRunning) { syncAgain = true; return false; }
     syncRunning = true;
     setCloudState('busy');
-    let changedCurrent = false;
+    let changedCurrent = false, changedAny = false;
     try {
       const { db, fs } = await cloudInit();
       for (const pid of SYNC_PROFILES) {
@@ -4147,6 +4147,7 @@ const BIMG = {
           applyingRemote = true;
           Object.entries(merged).forEach(([k, v]) => writeStore(k, v, pid));
           applyingRemote = false;
+          changedAny = true;
           if (pid === profileId) changedCurrent = true;
         }
         if (!sameData(merged, remoteData) || (avatars[pid] || null) !== (remote.avatar || null)) {
@@ -4159,6 +4160,13 @@ const BIMG = {
         const s = step;
         loadProfileState();
         if (s !== 1) showStep(s);
+      }
+      // overzicht open? dan meteen de nieuwe cijfers laten zien
+      const sheet = document.getElementById('parent');
+      if (changedAny && sheet.classList.contains('show')) {
+        const box = sheet.querySelector('.sheet-box'), top = box ? box.scrollTop : 0;
+        openParent(viewPid);
+        if (box) box.scrollTop = top;
       }
       return true;
     } catch (e) {
