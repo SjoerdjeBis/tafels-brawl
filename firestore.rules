@@ -34,7 +34,7 @@ service cloud.firestore {
   }
 
   function validProfile(pid) {
-    return pid in ['ben', 'jonas'];
+    return pid in ['ben', 'jonas', 'papa'];
   }
 
   // Alleen de velden die de app schrijft, en niet te groot.

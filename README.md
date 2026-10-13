@@ -11,7 +11,7 @@ Een statische website (één `index.html` met alles inline — base64 afbeelding
 
 ## Functies
 
-- **Profielen** — Ben, Jonas en Gast (voor vriendjes, begint steeds opnieuw); elk kind heeft een eigen album, oefengeheugen, records en bazen, en kiest zelf een plaatje
+- **Profielen** — Ben, Jonas, Papa en Gast (voor vriendjes, begint steeds opnieuw); elk kind heeft een eigen album, oefengeheugen, records en bazen, en kiest zelf een plaatje
 - **Startscherm in 3 stappen** — 1) kies je wereld en bekijk je verzamelalbum, 2) kies je spel, 3) kies je tafels (2 t/m 12, 15 en 20, met ★★★ per tafel)
 - **Verzamelalbum** — per wereld een tabblad, alle personages gegroepeerd op zeldzaamheid; tik voor details
 - **Vijf werelden**:
@@ -30,7 +30,7 @@ Een statische website (één `index.html` met alles inline — base64 afbeelding
 - **Leren van fouten** — bij een fout zie je de hele som en typ je het goede antwoord over
 - **📊 Overzicht** — per kind: per som wat goed en fout gaat, welke tafels nog lastig zijn, de lastigste sommen, verzameld per wereld, en wissen
 - **Alles wordt bewaard** in `localStorage` (per profiel): albums, records, bazen, oefengeheugen
-- **☁️ Op al je apparaten** — met een gezinscode (📊 → ☁️) worden Ben en Jonas gesynchroniseerd via Firebase (Firestore, locatie Nederland); samenvoegen in plaats van overschrijven, de gast wordt nooit opgeslagen. Een ander apparaat koppel je met de gekopieerde link (`?gezin=…`)
+- **☁️ Op al je apparaten** — met een gezinscode (📊 → ☁️) worden Ben, Jonas en Papa gesynchroniseerd via Firebase (Firestore, locatie Nederland); samenvoegen in plaats van overschrijven, de gast wordt nooit opgeslagen. Een ander apparaat koppel je met de gekopieerde link (`?gezin=…`)
 - **Mobiel eerst** — past zonder scrollen, ook op kleine telefoons; timers pauzeren als de app naar de achtergrond gaat
 - **Installeerbaar + offline** — zet de site op je beginscherm (PWA)
 

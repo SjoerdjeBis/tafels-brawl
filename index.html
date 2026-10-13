@@ -2593,6 +2593,7 @@ const BIMG = {
   const PROFILES = [
     { id: 'ben',   name: 'Ben',   avatar: '🦁', color: '#3a9dff' },
     { id: 'jonas', name: 'Jonas', avatar: '🐯', color: '#2ad96e' },
+    { id: 'papa',  name: 'Papa',  avatar: '🦈', color: '#b06bff' },
     { id: 'gast',  name: 'Gast',  avatar: '👋', color: '#ffb347', guest: true },
   ];
   const AVATARS = ['🦁','🐯','🦊','🐼','🐸','🦖','🐉','🦈','🐙','🦄','⚽','🚀','👾','🤖','⚡','🔥'];
@@ -2609,7 +2610,7 @@ const BIMG = {
   function writeStore(key, val, pid = profileId) {
     if (PER_PROFILE.includes(key) && !pid) return;
     try { localStorage.setItem(storeKey(key, pid), val); } catch (e) {}
-    // voortgang van Ben/Jonas veranderd: straks naar de cloud
+    // voortgang van een vast profiel veranderd: straks naar de cloud
     if (familyCode && !applyingRemote && pid && pid !== 'gast' && (PER_PROFILE.includes(key) || key === AVATAR_KEY)) scheduleSync();
   }
   function readJSON(key, fallback, pid) {
@@ -4018,7 +4019,7 @@ const BIMG = {
 
   // ============ CLOUD: OPSLAAN OP AL JE APPARATEN (Firebase) ============
   // Iedereen in het gezin deelt één lange geheime gezinscode. Per kind staat er één
-  // document in Firestore: families/<code>/profiles/<ben|jonas>. De gast wordt nooit opgeslagen.
+  // document in Firestore: families/<code>/profiles/<ben|jonas|papa>. De gast wordt nooit opgeslagen.
   // Bij synchroniseren wordt samengevoegd (niet overschreven), zodat spelen op twee
   // apparaten tegelijk niets kwijtraakt.
   const FB_CONFIG = {
@@ -4209,7 +4210,7 @@ const BIMG = {
   function cloudSectionHTML() {
     if (!familyCode) {
       return `<h3>☁️ Op al je apparaten</h3>
-        <p>Nu staat alles alleen op dit apparaat. Koppel een gezinscode, dan worden de albums en het oefengeheugen van Ben en Jonas op al jullie telefoons en tablets bewaard. (De gast wordt nooit opgeslagen.)</p>
+        <p>Nu staat alles alleen op dit apparaat. Koppel een gezinscode, dan worden de albums en het oefengeheugen van Ben, Jonas en Papa op al jullie telefoons en tablets bewaard. (De gast wordt nooit opgeslagen.)</p>
         <div class="p-cloud">
           <button type="button" class="p-btn" id="cloud-new">Nieuwe gezinscode maken</button>
           <div class="p-join">
