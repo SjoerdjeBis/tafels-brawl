@@ -1,30 +1,47 @@
 rules_version = '2';
 
-// Firestore-regels voor tafels-brawl. Niet automatisch actief: plak dit in de
-// Firebase-console → Firestore Database → Regels → Publiceren.
+// Tafels Brawl — beveiliging van de cloud-opslag.
+// Plak dit in de Firebase-console: Firestore Database → Regels → Publiceren.
 //
-// Opzet: de geheime gezinscode zit in het pad (families/<code>/profiles/<kind>).
-// Wie de code kent, mag dat ene document lezen en schrijven. Opvragen van lijsten
-// (welke gezinnen of profielen er zijn) mag niemand, anders lekt de code alsnog.
+// Idee: de geheime gezinscode (xxxx-xxxx-xxxx-xxxx-xxxx) is de "sleutel".
+// Wie de code kent, kan het document van Ben of Jonas lezen en bijwerken.
+// Niemand kan een lijst opvragen van welke gezinscodes er bestaan.
 service cloud.firestore {
   match /databases/{database}/documents {
 
     match /families/{code}/profiles/{pid} {
-      allow get: if geldig(code, pid);
-      allow create, update: if geldig(code, pid)
-        && request.resource.data.keys().hasOnly(['data', 'avatar', 'updatedAt'])
-        && request.resource.data.updatedAt == request.time;
+      // Alleen één los document ophalen (get), nooit een lijst (list):
+      // anders zou iemand alle gezinnen kunnen opvragen.
+      allow get: if validCode(code) && validProfile(pid) && request.auth != null;
+
+      allow create, update: if validCode(code) && validProfile(pid)
+        && request.auth != null
+        && validDoc(request.resource.data);
+
+      // Verwijderen en lijsten opvragen is nooit toegestaan.
+      allow delete, list: if false;
     }
 
-    function geldig(code, pid) {
-      return request.auth != null
-        && code.size() >= 20
-        && pid in ['ben', 'jonas'];
-    }
-
-    // Al het andere (lijsten, deleten, andere collecties) is dicht.
+    // Alles wat hierboven niet genoemd is: geen toegang.
     match /{document=**} {
       allow read, write: if false;
     }
+  }
+
+  // Gezinscode: precies 5 groepjes van 4 tekens, zoals de app ze maakt.
+  function validCode(code) {
+    return code.matches('^[a-z0-9]{4}(-[a-z0-9]{4}){4}$');
+  }
+
+  function validProfile(pid) {
+    return pid in ['ben', 'jonas'];
+  }
+
+  // Alleen de velden die de app schrijft, en niet te groot.
+  function validDoc(d) {
+    return d.keys().hasOnly(['data', 'avatar', 'updatedAt'])
+      && d.data is map
+      && (d.avatar == null || (d.avatar is string && d.avatar.size() <= 16))
+      && d.updatedAt == request.time;
   }
 }
